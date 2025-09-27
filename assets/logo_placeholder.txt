@@ -1,0 +1,10 @@
+# Placeholder logo.png file
+# Replace this with your actual logo image
+# Recommended size: 200x60 pixels or similar aspect ratio
+# Format: PNG with transparent background
+# 
+# To add your logo:
+# 1. Save your logo image as 'logo.png' in this assets folder
+# 2. The dashboard will automatically use it in the navigation bar
+# 
+# Logo will appear in the top-left corner of the navigation bar

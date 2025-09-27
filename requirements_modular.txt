@@ -1,0 +1,30 @@
+# Argo Float Dashboard - Requirements
+# Core dependencies for the modular dashboard
+
+# Dash framework and components
+dash==2.14.1
+dash-bootstrap-components==1.5.0
+dash-leaflet==0.1.23
+
+# Data processing and visualization
+plotly==5.17.0
+pandas==2.1.1
+numpy==1.24.3
+folium==0.14.0
+
+# FastAPI for REST endpoints
+fastapi==0.104.1
+uvicorn==0.24.0
+pydantic==2.4.2
+
+# Optional: Argo data access (if using real data)
+# argopy==0.1.14  # Uncomment when using real Argo data
+
+# Utilities
+python-dateutil==2.8.2
+pytz==2023.3
+
+# Development (optional)
+pytest==7.4.2
+black==23.9.1
+flake8==6.1.0
