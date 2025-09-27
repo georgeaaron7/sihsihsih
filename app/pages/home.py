@@ -8,117 +8,197 @@ from app.components.layout import create_info_card, create_page_header
 from app.components.visualizations import create_interactive_map, create_data_table
 
 def create_home_page(dashboard):
-    """Create the main home page content"""
+    """Create the main home page content with ocean theme"""
     float_info = dashboard.get_float_info()
     stats = dashboard.get_summary_stats()
     
     return html.Div([
-        # Hero section with quick stats
+        # Hero section with ocean theme
+        html.Div([
+            dbc.Container([
+                html.Div([
+                    html.H1([
+                        html.I(className="fas fa-water me-3", style={'color': '#4FC3F7'}),
+                        "Discover the Ocean's Secrets"
+                    ], className="display-3 text-white mb-4 font-weight-bold"),
+                    html.P([
+                        "Dive deep into the world's largest laboratory with Argo floats - autonomous robots exploring our oceans 24/7, ",
+                        "revealing the mysteries of marine ecosystems and climate patterns across the Indian Ocean."
+                    ], className="lead text-white mb-4", style={'font-size': '1.3rem'}),
+                    dbc.Button([
+                        html.I(className="fas fa-compass me-2"),
+                        "Explore Ocean Data"
+                    ], color="info", size="lg", className="me-3"),
+                    dbc.Button([
+                        html.I(className="fas fa-chart-line me-2"),
+                        "View Analytics"
+                    ], color="outline-light", size="lg")
+                ], className="text-center py-5")
+            ])
+        ], style={
+            'background': 'linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #4FC3F7 100%)',
+            'min-height': '60vh',
+            'display': 'flex',
+            'align-items': 'center',
+            'margin': '-2rem -15px 3rem -15px',
+            'position': 'relative'
+        }),
+        
+        # Stats cards with ocean theme
         dbc.Row([
             dbc.Col([
-                create_info_card(
-                    "Active Floats", 
-                    stats['total_floats'], 
-                    "fa-ship", 
-                    "primary",
-                    "Monitoring Indian Ocean"
-                )
+                dbc.Card([
+                    dbc.CardBody([
+                        html.Div([
+                            html.I(className="fas fa-ship fa-3x text-primary mb-3"),
+                            html.H2(stats['total_floats'], className="text-primary mb-2"),
+                            html.H6("Active Floats", className="text-light mb-1"),
+                            html.Small("Monitoring Indian Ocean", className="text-muted")
+                        ], className="text-center")
+                    ])
+                ], className="bg-dark border-primary shadow-lg h-100")
             ], md=3),
             dbc.Col([
-                create_info_card(
-                    "Avg Temperature", 
-                    f"{stats['avg_temp']:.1f}°C", 
-                    "fa-thermometer-half", 
-                    "danger",
-                    "Surface waters"
-                )
+                dbc.Card([
+                    dbc.CardBody([
+                        html.Div([
+                            html.I(className="fas fa-thermometer-half fa-3x text-danger mb-3"),
+                            html.H2(f"{stats['avg_temp']:.1f}°C", className="text-danger mb-2"),
+                            html.H6("Average Temperature", className="text-light mb-1"),
+                            html.Small("Surface waters", className="text-muted")
+                        ], className="text-center")
+                    ])
+                ], className="bg-dark border-danger shadow-lg h-100")
             ], md=3),
             dbc.Col([
-                create_info_card(
-                    "Avg Salinity", 
-                    f"{stats['avg_salinity']:.1f} PSU", 
-                    "fa-tint", 
-                    "info",
-                    "Practical Salinity Units"
-                )
+                dbc.Card([
+                    dbc.CardBody([
+                        html.Div([
+                            html.I(className="fas fa-tint fa-3x text-info mb-3"),
+                            html.H2(f"{stats['avg_salinity']:.1f}", className="text-info mb-2"),
+                            html.H6("Average Salinity", className="text-light mb-1"),
+                            html.Small("PSU (Practical Salinity Units)", className="text-muted")
+                        ], className="text-center")
+                    ])
+                ], className="bg-dark border-info shadow-lg h-100")
             ], md=3),
             dbc.Col([
-                create_info_card(
-                    "Max Depth", 
-                    f"{stats['max_depth']:.0f}m", 
-                    "fa-anchor", 
-                    "success",
-                    "Deepest measurement"
-                )
+                dbc.Card([
+                    dbc.CardBody([
+                        html.Div([
+                            html.I(className="fas fa-anchor fa-3x text-success mb-3"),
+                            html.H2(f"{stats['max_depth']:.0f}m", className="text-success mb-2"),
+                            html.H6("Maximum Depth", className="text-light mb-1"),
+                            html.Small("Deepest measurement", className="text-muted")
+                        ], className="text-center")
+                    ])
+                ], className="bg-dark border-success shadow-lg h-100")
             ], md=3)
         ], className="mb-5"),
         
-        # Quick insights section
+        # About Argo floats section
         dbc.Row([
             dbc.Col([
                 dbc.Card([
                     dbc.CardBody([
-                        html.H5([
-                            html.I(className="fas fa-lightbulb text-warning me-2"),
-                            "Real-time Ocean Insights"
-                        ], className="card-title"),
-                        html.Div([
-                            dbc.Badge("🌡️ Temperature Monitoring", color="light", className="me-2 mb-2"),
-                            dbc.Badge("🧂 Salinity Analysis", color="light", className="me-2 mb-2"),
-                            dbc.Badge("🌊 Depth Profiling", color="light", className="me-2 mb-2"),
-                            dbc.Badge("📊 Historical Trends", color="light", className="me-2 mb-2")
-                        ]),
+                        html.H3([
+                            html.I(className="fas fa-info-circle text-info me-3"),
+                            "What are Argo Floats?"
+                        ], className="text-light mb-4"),
                         html.P([
-                            "Our Argo float network provides continuous monitoring of ocean conditions across the Indian Ocean. ",
-                            "Each float autonomously collects temperature, salinity, and pressure measurements from surface to 2000m depth, ",
-                            "helping scientists understand climate patterns and ocean health."
-                        ], className="mt-3 text-muted")
+                            "Argo floats are sophisticated autonomous underwater vehicles that drift with ocean currents, ",
+                            "diving and surfacing in a continuous cycle to collect crucial oceanographic data. ",
+                            "These remarkable instruments are the backbone of global ocean observation."
+                        ], className="text-light mb-4", style={'font-size': '1.1rem'}),
+                        
+                        dbc.Row([
+                            dbc.Col([
+                                html.Div([
+                                    html.I(className="fas fa-arrows-alt-v fa-2x text-primary mb-3"),
+                                    html.H5("Autonomous Profiling", className="text-info"),
+                                    html.P("Floats dive to 2000m depth, then surface to transmit data via satellite", 
+                                           className="text-muted small")
+                                ], className="text-center")
+                            ], md=4),
+                            dbc.Col([
+                                html.Div([
+                                    html.I(className="fas fa-satellite fa-2x text-warning mb-3"),
+                                    html.H5("Real-time Data", className="text-info"),
+                                    html.P("Continuous monitoring provides real-time ocean condition updates", 
+                                           className="text-muted small")
+                                ], className="text-center")
+                            ], md=4),
+                            dbc.Col([
+                                html.Div([
+                                    html.I(className="fas fa-globe fa-2x text-success mb-3"),
+                                    html.H5("Global Network", className="text-info"),
+                                    html.P("Over 4000 floats worldwide create comprehensive ocean coverage", 
+                                           className="text-muted small")
+                                ], className="text-center")
+                            ], md=4)
+                        ])
                     ])
-                ], className="shadow-sm border-0")
-            ], md=8),
-            dbc.Col([
-                dbc.Card([
-                    dbc.CardBody([
-                        html.H5([
-                            html.I(className="fas fa-globe-asia text-primary me-2"),
-                            "Coverage Area"
-                        ], className="card-title"),
-                        html.Ul([
-                            html.Li("Arabian Sea monitoring"),
-                            html.Li("Bay of Bengal coverage"),
-                            html.Li("South Indian Ocean"),
-                            html.Li("Andaman Sea region")
-                        ], className="mb-0"),
-                        html.Hr(),
-                        html.Small([
-                            html.I(className="fas fa-clock me-1"),
-                            f"Last updated: {stats['date_range']['end'].strftime('%Y-%m-%d')}"
-                        ], className="text-muted")
-                    ])
-                ], className="shadow-sm border-0")
-            ], md=4)
+                ], className="bg-dark shadow-lg border-secondary")
+            ])
         ], className="mb-5"),
         
-        # Interactive map section
+        # Ocean science importance
         dbc.Row([
             dbc.Col([
                 dbc.Card([
-                    dbc.CardHeader([
-                        html.H4([
-                            html.I(className="fas fa-map-marked-alt me-2"),
-                            "Interactive Float Map"
-                        ], className="mb-0 text-primary")
-                    ]),
                     dbc.CardBody([
-                        dbc.Alert([
-                            html.I(className="fas fa-info-circle me-2"),
-                            html.Strong("Interactive Features: "),
-                            "Click on any float marker for detailed information. Use map controls to zoom and explore different regions. ",
-                            "Float colors indicate temperature ranges."
-                        ], color="light", className="mb-3"),
-                        create_interactive_map(float_info)
+                        html.H3([
+                            html.I(className="fas fa-microscope text-warning me-3"),
+                            "Why Ocean Data Matters"
+                        ], className="text-light mb-4"),
+                        
+                        dbc.Row([
+                            dbc.Col([
+                                dbc.Card([
+                                    dbc.CardBody([
+                                        html.I(className="fas fa-cloud-sun fa-2x text-info mb-3"),
+                                        html.H6("Climate Monitoring", className="text-light"),
+                                        html.P("Track climate change through ocean temperature and salinity patterns", 
+                                               className="text-muted small mb-0")
+                                    ], className="text-center")
+                                ], className="bg-secondary border-0 h-100")
+                            ], md=6),
+                            dbc.Col([
+                                dbc.Card([
+                                    dbc.CardBody([
+                                        html.I(className="fas fa-fish fa-2x text-success mb-3"),
+                                        html.H6("Marine Ecosystems", className="text-light"),
+                                        html.P("Understand how ocean conditions affect marine life and ecosystems", 
+                                               className="text-muted small mb-0")
+                                    ], className="text-center")
+                                ], className="bg-secondary border-0 h-100")
+                            ], md=6)
+                        ], className="mb-3"),
+                        
+                        dbc.Row([
+                            dbc.Col([
+                                dbc.Card([
+                                    dbc.CardBody([
+                                        html.I(className="fas fa-hurricane fa-2x text-danger mb-3"),
+                                        html.H6("Weather Prediction", className="text-light"),
+                                        html.P("Improve weather forecasting and extreme event prediction", 
+                                               className="text-muted small mb-0")
+                                    ], className="text-center")
+                                ], className="bg-secondary border-0 h-100")
+                            ], md=6),
+                            dbc.Col([
+                                dbc.Card([
+                                    dbc.CardBody([
+                                        html.I(className="fas fa-shipping-fast fa-2x text-primary mb-3"),
+                                        html.H6("Maritime Safety", className="text-light"),
+                                        html.P("Support safe navigation and maritime operations worldwide", 
+                                               className="text-muted small mb-0")
+                                    ], className="text-center")
+                                ], className="bg-secondary border-0 h-100")
+                            ], md=6)
+                        ])
                     ])
-                ], className="shadow border-0")
+                ], className="bg-dark shadow-lg border-secondary")
             ])
         ], className="mb-5"),
         
@@ -129,19 +209,19 @@ def create_home_page(dashboard):
                     dbc.CardHeader([
                         html.H4([
                             html.I(className="fas fa-table me-2"),
-                            "Float Data Overview"
-                        ], className="mb-0 text-success")
-                    ]),
+                            "Live Float Data"
+                        ], className="mb-0 text-info")
+                    ], className="bg-secondary"),
                     dbc.CardBody([
                         dbc.Alert([
                             html.I(className="fas fa-mouse-pointer me-2"),
-                            html.Strong("How to use: "),
+                            html.Strong("Interactive Table: "),
                             "Click on any row to select a float and view detailed analysis below. ",
-                            "Use column filters to search specific data. Sort by clicking column headers."
-                        ], color="light", className="mb-3"),
+                            "Use column filters to search specific data."
+                        ], color="dark", className="mb-3"),
                         create_data_table(float_info)
                     ])
-                ], className="shadow border-0")
+                ], className="bg-dark shadow-lg border-secondary")
             ])
         ], className="mb-4"),
         

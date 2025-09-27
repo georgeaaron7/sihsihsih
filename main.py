@@ -6,6 +6,7 @@ Modular Argo Float Dashboard
 import dash
 from dash import html, dcc, Input, Output, State, callback_context
 import dash_bootstrap_components as dbc
+import requests
 
 # Import modules
 from app.data.argo_data import ArgoFloatDashboard
@@ -38,19 +39,22 @@ app.index_string = '''
         {%css%}
         <style>
             :root {
-                --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+                --ocean-blue-gradient: linear-gradient(135deg, #0f4c75 0%, #3282b8 50%, #bbe1fa 100%);
+                --deep-ocean-gradient: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #4FC3F7 100%);
+                --dark-gradient: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
             }
             
             body {
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+                background: linear-gradient(135deg, #0f1419 0%, #1a252f 50%, #2c3e50 100%);
                 min-height: 100vh;
+                color: #e9ecef;
             }
             
             .navbar-modern {
-                background: var(--primary-gradient) !important;
+                background: var(--deep-ocean-gradient) !important;
                 backdrop-filter: blur(10px);
+                border-bottom: 2px solid rgba(79, 195, 247, 0.3);
             }
             
             .nav-link-modern {
@@ -58,37 +62,42 @@ app.index_string = '''
                 border-radius: 8px;
                 margin: 0 5px;
                 font-weight: 500;
+                color: #e9ecef !important;
             }
             
             .nav-link-modern:hover {
-                background-color: rgba(255, 255, 255, 0.2) !important;
+                background: linear-gradient(135deg, rgba(79, 195, 247, 0.2), rgba(50, 130, 184, 0.3)) !important;
                 transform: translateY(-2px);
                 color: white !important;
+                box-shadow: 0 4px 15px rgba(79, 195, 247, 0.2);
             }
             
             .nav-link-modern.active {
-                background-color: rgba(255, 255, 255, 0.3) !important;
+                background: linear-gradient(135deg, rgba(79, 195, 247, 0.3), rgba(50, 130, 184, 0.4)) !important;
                 color: white !important;
                 font-weight: 600;
+                box-shadow: 0 4px 20px rgba(79, 195, 247, 0.3);
             }
             
             .card {
-                border: none;
+                border: 1px solid rgba(79, 195, 247, 0.2);
                 border-radius: 12px;
-                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
                 transition: all 0.3s ease;
+                background: linear-gradient(135deg, rgba(52, 73, 94, 0.9), rgba(44, 62, 80, 0.9)) !important;
                 backdrop-filter: blur(10px);
-                background: rgba(255, 255, 255, 0.95);
+                color: #e9ecef;
             }
             
             .card:hover {
                 transform: translateY(-5px);
-                box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+                box-shadow: 0 12px 40px rgba(79, 195, 247, 0.2);
+                border-color: rgba(79, 195, 247, 0.4);
             }
             
             .card-hover:hover {
                 transform: translateY(-3px);
-                box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
+                box-shadow: 0 8px 30px rgba(79, 195, 247, 0.15);
             }
             
             .btn {
@@ -97,8 +106,15 @@ app.index_string = '''
                 transition: all 0.3s ease;
             }
             
+            .btn-primary {
+                background: var(--deep-ocean-gradient) !important;
+                border: none !important;
+                box-shadow: 0 4px 15px rgba(79, 195, 247, 0.3);
+            }
+            
             .btn:hover {
                 transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(79, 195, 247, 0.4) !important;
             }
             
             .badge {
@@ -107,15 +123,21 @@ app.index_string = '''
             }
             
             .alert {
-                border: none;
+                border: 1px solid rgba(79, 195, 247, 0.2);
                 border-radius: 10px;
-                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+                background: linear-gradient(135deg, rgba(52, 73, 94, 0.8), rgba(44, 62, 80, 0.8)) !important;
             }
             
             /* Dash table styling */
             .dash-table-container {
                 border-radius: 12px;
                 overflow: hidden;
+                background: rgba(52, 73, 94, 0.9) !important;
+            }
+            
+            .dash-table-container .dash-spreadsheet-container {
+                background: rgba(44, 62, 80, 0.9) !important;
             }
             
             /* Loading spinner */
@@ -125,21 +147,22 @@ app.index_string = '''
             
             /* Custom scrollbar */
             ::-webkit-scrollbar {
-                width: 8px;
+                width: 10px;
             }
             
             ::-webkit-scrollbar-track {
-                background: #f1f1f1;
-                border-radius: 4px;
+                background: rgba(44, 62, 80, 0.5);
+                border-radius: 6px;
             }
             
             ::-webkit-scrollbar-thumb {
-                background: var(--primary-gradient);
-                border-radius: 4px;
+                background: var(--deep-ocean-gradient);
+                border-radius: 6px;
+                border: 2px solid rgba(44, 62, 80, 0.5);
             }
             
             ::-webkit-scrollbar-thumb:hover {
-                background: #555;
+                background: linear-gradient(135deg, #4FC3F7, #3282b8);
             }
             
             /* Animation classes */
@@ -357,6 +380,104 @@ def update_charts_page(selected_float, analysis_type, current_page):
             "Failed to load charts", 
             str(e)
         )
+
+# Map type selector callback
+@app.callback(
+    Output('interactive-map-container', 'children'),
+    [Input('map-type-selector', 'value')],
+    [State('current-page', 'data')]
+)
+def update_map_type(map_type, current_page):
+    """Update map visualization based on selected type"""
+    if current_page != 'map':
+        return html.Div()
+    
+    try:
+        float_info = dashboard.get_float_info()
+        
+        if map_type == 'plotly':
+            from app.components.visualizations import create_plotly_interactive_map
+            return create_plotly_interactive_map(float_info)
+        else:
+            from app.components.visualizations import create_interactive_map
+            return create_interactive_map(float_info)
+            
+    except Exception as e:
+        return create_error_alert(
+            "Failed to load map", 
+            str(e)
+        )
+
+# Float click callback for Plotly map
+@app.callback(
+    Output('float-click-info', 'children'),
+    [Input('plotly-float-map', 'clickData')],
+    [State('current-page', 'data')]
+)
+def handle_float_click(clickData, current_page):
+    """Handle float marker clicks and make API call"""
+    if current_page != 'map' or not clickData:
+        return html.Div()
+    
+    try:
+        # Extract platform number from click data
+        platform_number = clickData['points'][0]['customdata']
+        
+        # Make API call to log the click
+        api_url = "http://127.0.0.1:8061"  # FastAPI server URL
+        try:
+            response = requests.post(f"{api_url}/floats/{platform_number}/click", timeout=5)
+            if response.status_code == 200:
+                api_message = "✅ Click logged to API server"
+                api_color = "success"
+            else:
+                api_message = f"⚠️ API response: {response.status_code}"
+                api_color = "warning"
+        except requests.exceptions.RequestException as e:
+            api_message = f"❌ API server unavailable: {str(e)[:50]}..."
+            api_color = "danger"
+        
+        # Get float details
+        float_info = dashboard.get_float_info()
+        float_data = float_info[float_info['PLATFORM_NUMBER'] == platform_number]
+        
+        if float_data.empty:
+            return dbc.Alert("Float not found", color="danger")
+        
+        float_record = float_data.iloc[0]
+        
+        return dbc.Card([
+            dbc.CardHeader([
+                html.H5([
+                    html.I(className="fas fa-ship me-2"),
+                    f"Float {platform_number} - Click Details"
+                ], className="mb-0 text-primary")
+            ]),
+            dbc.CardBody([
+                dbc.Alert(api_message, color=api_color, className="mb-3"),
+                dbc.Row([
+                    dbc.Col([
+                        html.H6("📍 Location", className="text-info mb-2"),
+                        html.P([html.Strong("Coordinates: "), 
+                               f"{float_record['LATITUDE']:.4f}°N, {float_record['LONGITUDE']:.4f}°E"]),
+                        html.P([html.Strong("Region: "), float_record['LOCATION']])
+                    ], md=4),
+                    dbc.Col([
+                        html.H6("🌡️ Measurements", className="text-warning mb-2"),
+                        html.P([html.Strong("Temperature: "), f"{float_record['AVG_TEMP']:.2f}°C"]),
+                        html.P([html.Strong("Salinity: "), f"{float_record['AVG_SALINITY']:.2f} PSU"])
+                    ], md=4),
+                    dbc.Col([
+                        html.H6("📊 Statistics", className="text-success mb-2"),
+                        html.P([html.Strong("Max Depth: "), f"{float_record['MAX_DEPTH']:.0f}m"]),
+                        html.P([html.Strong("Cycles: "), str(float_record['MAX_CYCLE'])])
+                    ], md=4)
+                ])
+            ])
+        ], className="mt-3")
+        
+    except Exception as e:
+        return dbc.Alert(f"Error processing click: {str(e)}", color="danger")
 
 if __name__ == '__main__':
     print("\n" + "="*70)

@@ -1,0 +1,4 @@
+2025-09-28 02:07:56,964 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/
+2025-09-28 02:07:56,972 - api_server - INFO - ⚡ Response: 200 | Time: 0.008s | Path: /
+2025-09-28 02:07:57,030 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/favicon.ico
+2025-09-28 02:07:57,031 - api_server - INFO - ⚡ Response: 404 | Time: 0.001s | Path: /favicon.ico

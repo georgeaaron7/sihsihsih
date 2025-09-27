@@ -10,6 +10,11 @@ import pandas as pd
 import numpy as np
 from dash import html, dcc, dash_table
 import dash_bootstrap_components as dbc
+import requests
+import logging
+
+# Configure logging for API calls
+logger = logging.getLogger(__name__)
 
 def create_interactive_map(float_info):
     """Create an interactive Folium map with float locations"""
@@ -485,3 +490,102 @@ def create_time_series_plots(profile_df, platform_number):
     )
     
     return dcc.Graph(figure=fig, className="shadow-sm")
+
+def create_plotly_interactive_map(float_info):
+    """Create an interactive Plotly map with float locations that can trigger API callbacks"""
+    
+    # Prepare data for plotting
+    float_data = float_info.copy()
+    
+    # Color mapping based on temperature
+    def get_temp_color(temp):
+        if temp > 29:
+            return 'red'
+        elif temp > 27:
+            return 'orange'
+        elif temp > 25:
+            return 'green'
+        elif temp > 23:
+            return 'blue'
+        else:
+            return 'purple'
+    
+    float_data['color'] = float_data['AVG_TEMP'].apply(get_temp_color)
+    float_data['size'] = 15  # Marker size
+    
+    # Create hover text
+    float_data['hover_text'] = float_data.apply(lambda row: 
+        f"<b>Float {row['PLATFORM_NUMBER']}</b><br>" +
+        f"📍 {row['LATITUDE']:.3f}°N, {row['LONGITUDE']:.3f}°E<br>" +
+        f"🌡️ Temperature: {row['AVG_TEMP']:.1f}°C<br>" +
+        f"🧂 Salinity: {row['AVG_SALINITY']:.1f} PSU<br>" +
+        f"⚓ Max Depth: {row['MAX_DEPTH']:.0f}m<br>" +
+        f"📅 Last Update: {row['LAST_DATE'].strftime('%Y-%m-%d')}<br>" +
+        f"📍 {row['LOCATION']}", axis=1)
+    
+    # Create the Plotly figure
+    fig = go.Figure()
+    
+    # Add float markers grouped by color for legend
+    colors = ['red', 'orange', 'green', 'blue', 'purple']
+    color_labels = {
+        'red': 'Very Hot (>29°C)',
+        'orange': 'Hot (27-29°C)',
+        'green': 'Warm (25-27°C)',
+        'blue': 'Cool (23-25°C)',
+        'purple': 'Cold (<23°C)'
+    }
+    
+    for color in colors:
+        color_data = float_data[float_data['color'] == color]
+        if not color_data.empty:
+            fig.add_trace(go.Scattermapbox(
+                lat=color_data['LATITUDE'],
+                lon=color_data['LONGITUDE'],
+                mode='markers',
+                marker=dict(
+                    size=15,
+                    color=color,
+                    opacity=0.8,
+                    symbol='circle'
+                ),
+                text=color_data['hover_text'],
+                hovertemplate='%{text}<extra></extra>',
+                customdata=color_data['PLATFORM_NUMBER'],
+                name=color_labels[color],
+                showlegend=True
+            ))
+    
+    # Update layout for the map
+    fig.update_layout(
+        mapbox=dict(
+            style="open-street-map",
+            center=dict(lat=15, lon=78),
+            zoom=4
+        ),
+        height=600,
+        margin=dict(l=0, r=0, t=0, b=0),
+        showlegend=True,
+        legend=dict(
+            yanchor="top",
+            y=0.99,
+            xanchor="left",
+            x=0.01,
+            bgcolor="rgba(255,255,255,0.8)",
+            bordercolor="rgba(0,0,0,0.2)",
+            borderwidth=1
+        ),
+        paper_bgcolor='rgba(0,0,0,0)',
+        plot_bgcolor='rgba(0,0,0,0)'
+    )
+    
+    return dcc.Graph(
+        id='plotly-float-map',
+        figure=fig,
+        config={
+            'displayModeBar': True,
+            'displaylogo': False,
+            'modeBarButtonsToRemove': ['pan2d', 'lasso2d', 'select2d']
+        },
+        style={'height': '600px'}
+    )

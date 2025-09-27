@@ -5,7 +5,7 @@ Map Page Layout
 from dash import html, dcc
 import dash_bootstrap_components as dbc
 from app.components.layout import create_page_header
-from app.components.visualizations import create_interactive_map
+from app.components.visualizations import create_interactive_map, create_plotly_interactive_map
 
 def create_map_page(dashboard):
     """Create the dedicated map page"""
@@ -43,7 +43,7 @@ def create_map_page(dashboard):
                                     },
                                     tooltip={"placement": "bottom", "always_visible": True}
                                 )
-                            ], md=6),
+                            ], md=4),
                             dbc.Col([
                                 html.Label("Region Filter:", className="fw-bold"),
                                 dcc.Dropdown(
@@ -58,7 +58,19 @@ def create_map_page(dashboard):
                                     value='all',
                                     className="mb-2"
                                 )
-                            ], md=6)
+                            ], md=4),
+                            dbc.Col([
+                                html.Label("Map Type:", className="fw-bold"),
+                                dcc.Dropdown(
+                                    id='map-type-selector',
+                                    options=[
+                                        {'label': '🗺️ Interactive (Plotly)', 'value': 'plotly'},
+                                        {'label': '🌍 Traditional (Folium)', 'value': 'folium'}
+                                    ],
+                                    value='plotly',
+                                    className="mb-2"
+                                )
+                            ], md=4)
                         ])
                     ])
                 ], className="shadow-sm mb-4")
@@ -107,12 +119,15 @@ def create_map_page(dashboard):
                             ])
                         ]),
                         
-                        # Map container
+                        # Map container (dynamically updated based on map type)
                         html.Div(
                             id="interactive-map-container",
-                            children=create_interactive_map(float_info),
+                            children=create_plotly_interactive_map(float_info),  # Default to Plotly
                             style={'min-height': '600px'}
-                        )
+                        ),
+                        
+                        # Float click info display
+                        html.Div(id="float-click-info", className="mt-3")
                     ])
                 ], className="shadow border-0")
             ])

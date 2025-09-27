@@ -37,17 +37,66 @@ final/
 
 ### 1. Install Dependencies
 ```bash
-pip install -r requirements_modular.txt
+# Use python3/pip3 for compatibility
+pip3 install -r requirements_modular.txt
 ```
 
-### 2. Run the Dashboard
-```bash
-python main.py
-```
-Visit: http://127.0.0.1:8050
+### 2. Run Both Servers
 
-### 3. Run the API Server (optional)
+#### Option A: Run Both Servers Separately (Recommended)
+
+**Terminal 1 - FastAPI Backend:**
 ```bash
+# Start the API server first
+python3 api/api_server.py
+
+# Server will start on: http://127.0.0.1:8061
+# API docs available at: http://127.0.0.1:8061/docs
+```
+
+**Terminal 2 - Dash Frontend:**
+```bash
+# Start the dashboard (in a new terminal)
+python3 main.py
+
+# Dashboard will start on: http://127.0.0.1:8060
+# Click on float markers to see API logging in Terminal 1
+```
+
+#### Option B: Run Only the Dashboard
+```bash
+# Run dashboard only (without API backend)
+python3 main.py
+# Visit: http://127.0.0.1:8060
+# Note: Float click API calls will fail but dashboard works normally
+```
+
+### 3. Verify Setup
+
+1. **Check API Health:**
+   ```bash
+   curl http://127.0.0.1:8061/health
+   ```
+
+2. **Test Float Data:**
+   ```bash
+   curl http://127.0.0.1:8061/floats
+   ```
+
+3. **Open Dashboard:**
+   - Navigate to http://127.0.0.1:8060
+   - Go to "Interactive Map" page
+   - Click on float markers to trigger API calls
+   - Check Terminal 1 for logged requests
+
+### 4. Features Verification
+
+- ✅ **Home Page**: Ocean-themed dashboard with stats
+- ✅ **Interactive Map**: Plotly map with clickable float markers
+- ✅ **API Integration**: Float clicks logged to backend
+- ✅ **Historical Charts**: Time series and profile analysis
+- ✅ **Responsive Design**: Works on mobile and desktop
+- ✅ **Modular Architecture**: Clean, maintainable code structure
 cd api
 python api_server.py
 ```
