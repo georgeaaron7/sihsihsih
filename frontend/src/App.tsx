@@ -9,6 +9,10 @@ const LandingPage = React.lazy(() => import('./pages/LandingPage'));
 const DashboardPage = React.lazy(() => import('./pages/DashboardPage'));
 const FloatDetailPage = React.lazy(() => import('./pages/FloatDetailPage'));
 const StatsPage = React.lazy(() => import('./pages/StatsPage'));
+const NewsPage = React.lazy(() => import('./pages/NewsPage'));
+const InteractiveMapPage = React.lazy(() => import('./pages/InteractiveMapPage'));
+const FloatAnalysisPage = React.lazy(() => import('./pages/FloatAnalysisPage'));
+const OceanAIPage = React.lazy(() => import('./pages/OceanAIPage'));
 
 // Components
 import ErrorBoundary from './components/ErrorBoundary';
@@ -122,6 +126,62 @@ function App() {
                         transition={pageTransition}
                       >
                         <StatsPage />
+                      </motion.div>
+                    }
+                  />
+                  <Route
+                    path="/news"
+                    element={
+                      <motion.div
+                        initial="initial"
+                        animate="in"
+                        exit="out"
+                        variants={pageVariants}
+                        transition={pageTransition}
+                      >
+                        <NewsPage />
+                      </motion.div>
+                    }
+                  />
+                  <Route
+                    path="/map"
+                    element={
+                      <motion.div
+                        initial="initial"
+                        animate="in"
+                        exit="out"
+                        variants={pageVariants}
+                        transition={pageTransition}
+                      >
+                        <InteractiveMapPage />
+                      </motion.div>
+                    }
+                  />
+                  <Route
+                    path="/float-analysis"
+                    element={
+                      <motion.div
+                        initial="initial"
+                        animate="in"
+                        exit="out"
+                        variants={pageVariants}
+                        transition={pageTransition}
+                      >
+                        <FloatAnalysisPage />
+                      </motion.div>
+                    }
+                  />
+                  <Route
+                    path="/ocean-ai"
+                    element={
+                      <motion.div
+                        initial="initial"
+                        animate="in"
+                        exit="out"
+                        variants={pageVariants}
+                        transition={pageTransition}
+                      >
+                        <OceanAIPage />
                       </motion.div>
                     }
                   />

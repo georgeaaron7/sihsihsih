@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Home, BarChart3, Activity, Menu, X } from 'lucide-react';
+import { Home, BarChart3, Activity, Menu, X, Newspaper, Map, TrendingUp, Bot } from 'lucide-react';
 import { useState } from 'react';
 
 const Nav: React.FC = () => {
@@ -11,6 +11,10 @@ const Nav: React.FC = () => {
   const navItems = [
     { name: 'Home', href: '/', icon: Home },
     { name: 'Dashboard', href: '/dashboard', icon: BarChart3 },
+    { name: 'Interactive Map', href: '/map', icon: Map },
+    { name: 'Float Analysis', href: '/float-analysis', icon: TrendingUp },
+    { name: 'News', href: '/news', icon: Newspaper },
+    { name: 'Ocean AI', href: '/ocean-ai', icon: Bot },
     { name: 'Stats', href: '/stats', icon: Activity },
   ];
 

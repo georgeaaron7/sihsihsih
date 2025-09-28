@@ -51,3 +51,97 @@
 2025-09-28 09:56:31,288 - api_server - INFO - ⚡ Response: 200 | Time: 0.003s | Path: /floats/1234578/profiles
 2025-09-28 09:56:31,302 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/floats/1234578/temperature-series
 2025-09-28 09:56:31,309 - api_server - INFO - ⚡ Response: 200 | Time: 0.007s | Path: /floats/1234578/temperature-series
+2025-09-28 10:51:45,442 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/floats?region=
+2025-09-28 10:51:45,447 - api_server - INFO - ⚡ Response: 200 | Time: 0.005s | Path: /floats
+2025-09-28 10:51:49,191 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/stats
+2025-09-28 10:51:50,199 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/stats
+2025-09-28 10:51:52,206 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/stats
+2025-09-28 10:51:56,213 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/stats
+2025-09-28 10:52:00,708 - api_server - INFO - 🌊 Incoming request: OPTIONS http://127.0.0.1:8061/floats/1234569/click
+2025-09-28 10:52:00,708 - api_server - INFO - ⚡ Response: 200 | Time: 0.000s | Path: /floats/1234569/click
+2025-09-28 10:52:00,709 - api_server - INFO - 🌊 Incoming request: POST http://127.0.0.1:8061/floats/1234569/click
+2025-09-28 10:52:00,710 - api_server - INFO - 🎯 FLOAT CLICK EVENT - Platform: 1234569 | IP: 127.0.0.1 | User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap...
+2025-09-28 10:52:00,712 - api_server - INFO - ✅ Float 1234569 click processed successfully
+2025-09-28 10:52:00,712 - api_server - INFO - ⚡ Response: 200 | Time: 0.003s | Path: /floats/1234569/click
+2025-09-28 10:52:00,783 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/floats/1234569/details
+2025-09-28 10:52:00,784 - api_server - INFO - 📊 Fetching details for float 1234569
+2025-09-28 10:52:00,788 - api_server - INFO - ✅ Retrieved details for float 1234569
+2025-09-28 10:52:00,790 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/floats/1234569/profiles?latest=true
+2025-09-28 10:52:00,793 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/floats/1234569/temperature-series
+2025-09-28 10:52:00,798 - api_server - INFO - ⚡ Response: 200 | Time: 0.015s | Path: /floats/1234569/details
+2025-09-28 10:52:00,799 - api_server - INFO - ⚡ Response: 200 | Time: 0.009s | Path: /floats/1234569/profiles
+2025-09-28 10:52:00,799 - api_server - INFO - ⚡ Response: 200 | Time: 0.007s | Path: /floats/1234569/temperature-series
+2025-09-28 10:53:32,310 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/stats
+2025-09-28 10:53:33,322 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/stats
+2025-09-28 10:53:35,327 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/stats
+2025-09-28 11:05:11,318 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/floats?region=
+2025-09-28 11:05:11,321 - api_server - INFO - ⚡ Response: 200 | Time: 0.003s | Path: /floats
+2025-09-28 11:06:58,744 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/floats?region=
+2025-09-28 11:06:58,745 - api_server - INFO - ⚡ Response: 200 | Time: 0.001s | Path: /floats
+2025-09-28 11:11:06,612 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/floats?region=
+2025-09-28 11:11:06,617 - api_server - INFO - ⚡ Response: 200 | Time: 0.005s | Path: /floats
+2025-09-28 11:11:09,092 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/floats
+2025-09-28 11:11:09,094 - api_server - INFO - ⚡ Response: 200 | Time: 0.001s | Path: /floats
+2025-09-28 11:53:10,152 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/floats?region=
+2025-09-28 11:53:10,155 - api_server - INFO - ⚡ Response: 200 | Time: 0.003s | Path: /floats
+2025-09-28 11:53:13,861 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/floats
+2025-09-28 11:53:13,863 - api_server - INFO - ⚡ Response: 200 | Time: 0.002s | Path: /floats
+2025-09-28 11:53:27,320 - api_server - INFO - 🌊 Incoming request: OPTIONS http://127.0.0.1:8061/floats/1234569/click
+2025-09-28 11:53:27,321 - api_server - INFO - ⚡ Response: 200 | Time: 0.001s | Path: /floats/1234569/click
+2025-09-28 11:53:27,323 - api_server - INFO - 🌊 Incoming request: POST http://127.0.0.1:8061/floats/1234569/click
+2025-09-28 11:53:27,323 - api_server - INFO - 🎯 FLOAT CLICK EVENT - Platform: 1234569 | IP: 127.0.0.1 | User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap...
+2025-09-28 11:53:27,325 - api_server - INFO - ✅ Float 1234569 click processed successfully
+2025-09-28 11:53:27,325 - api_server - INFO - ⚡ Response: 200 | Time: 0.002s | Path: /floats/1234569/click
+2025-09-28 11:53:41,925 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/floats/1234567/details
+2025-09-28 11:53:41,925 - api_server - INFO - 📊 Fetching details for float 1234567
+2025-09-28 11:53:41,930 - api_server - INFO - ✅ Retrieved details for float 1234567
+2025-09-28 11:53:41,931 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/floats/1234567/temperature-series
+2025-09-28 11:53:41,938 - api_server - INFO - ⚡ Response: 200 | Time: 0.013s | Path: /floats/1234567/details
+2025-09-28 11:53:41,939 - api_server - INFO - ⚡ Response: 200 | Time: 0.007s | Path: /floats/1234567/temperature-series
+2025-09-28 11:54:38,996 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/stats
+2025-09-28 11:54:40,003 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/stats
+2025-09-28 11:54:42,008 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/stats
+2025-09-28 11:55:32,652 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/floats?region=
+2025-09-28 11:55:32,653 - api_server - INFO - ⚡ Response: 200 | Time: 0.001s | Path: /floats
+2025-09-28 11:56:02,120 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/floats?region=
+2025-09-28 11:56:02,121 - api_server - INFO - ⚡ Response: 200 | Time: 0.002s | Path: /floats
+2025-09-28 11:56:17,042 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/floats?region=
+2025-09-28 11:56:17,043 - api_server - INFO - ⚡ Response: 200 | Time: 0.001s | Path: /floats
+2025-09-28 11:59:04,418 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/floats?region=
+2025-09-28 11:59:04,419 - api_server - INFO - ⚡ Response: 200 | Time: 0.002s | Path: /floats
+2025-09-28 11:59:20,840 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/floats
+2025-09-28 11:59:20,841 - api_server - INFO - ⚡ Response: 200 | Time: 0.001s | Path: /floats
+2025-09-28 12:01:24,431 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/floats
+2025-09-28 12:01:24,433 - api_server - INFO - ⚡ Response: 200 | Time: 0.002s | Path: /floats
+2025-09-28 12:01:36,516 - api_server - INFO - 🌊 Incoming request: POST http://127.0.0.1:8061/floats/1234569/click
+2025-09-28 12:01:36,516 - api_server - INFO - 🎯 FLOAT CLICK EVENT - Platform: 1234569 | IP: 127.0.0.1 | User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap...
+2025-09-28 12:01:36,517 - api_server - INFO - ✅ Float 1234569 click processed successfully
+2025-09-28 12:01:36,518 - api_server - INFO - ⚡ Response: 200 | Time: 0.002s | Path: /floats/1234569/click
+2025-09-28 12:01:47,840 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/floats/1234572/details
+2025-09-28 12:01:47,841 - api_server - INFO - 📊 Fetching details for float 1234572
+2025-09-28 12:01:47,846 - api_server - INFO - ✅ Retrieved details for float 1234572
+2025-09-28 12:01:47,846 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/floats/1234572/temperature-series
+2025-09-28 12:01:47,850 - api_server - INFO - ⚡ Response: 200 | Time: 0.010s | Path: /floats/1234572/details
+2025-09-28 12:01:47,851 - api_server - INFO - ⚡ Response: 200 | Time: 0.005s | Path: /floats/1234572/temperature-series
+2025-09-28 12:03:29,953 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/floats?region=
+2025-09-28 12:03:29,955 - api_server - INFO - ⚡ Response: 200 | Time: 0.002s | Path: /floats
+2025-09-28 12:08:42,762 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/floats?region=
+2025-09-28 12:08:42,771 - api_server - INFO - ⚡ Response: 200 | Time: 0.009s | Path: /floats
+2025-09-28 12:13:39,918 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/floats
+2025-09-28 12:13:39,921 - api_server - INFO - ⚡ Response: 200 | Time: 0.003s | Path: /floats
+2025-09-28 12:13:43,259 - api_server - INFO - 🌊 Incoming request: OPTIONS http://127.0.0.1:8061/floats/1234573/click
+2025-09-28 12:13:43,260 - api_server - INFO - ⚡ Response: 200 | Time: 0.001s | Path: /floats/1234573/click
+2025-09-28 12:13:43,262 - api_server - INFO - 🌊 Incoming request: POST http://127.0.0.1:8061/floats/1234573/click
+2025-09-28 12:13:43,263 - api_server - INFO - 🎯 FLOAT CLICK EVENT - Platform: 1234573 | IP: 127.0.0.1 | User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap...
+2025-09-28 12:13:43,266 - api_server - INFO - ✅ Float 1234573 click processed successfully
+2025-09-28 12:13:43,266 - api_server - INFO - ⚡ Response: 200 | Time: 0.004s | Path: /floats/1234573/click
+2025-09-28 12:14:02,299 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/floats/1234569/details
+2025-09-28 12:14:02,299 - api_server - INFO - 📊 Fetching details for float 1234569
+2025-09-28 12:14:02,305 - api_server - INFO - ✅ Retrieved details for float 1234569
+2025-09-28 12:14:02,306 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/floats/1234569/temperature-series
+2025-09-28 12:14:02,312 - api_server - INFO - ⚡ Response: 200 | Time: 0.013s | Path: /floats/1234569/details
+2025-09-28 12:14:02,312 - api_server - INFO - ⚡ Response: 200 | Time: 0.006s | Path: /floats/1234569/temperature-series
+2025-09-28 12:14:39,467 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/stats
+2025-09-28 12:14:40,486 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/stats
+2025-09-28 12:14:42,492 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/stats
+2025-09-28 12:14:46,499 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/stats

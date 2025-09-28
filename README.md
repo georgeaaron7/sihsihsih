@@ -22,8 +22,8 @@ pip install -r requirements.txt
 
 **Terminal 1 - Start Backend API:**
 ```bash
-python main.py
-# API will run on http://localhost:8000
+python api/api_server.py
+# API will run on http://localhost:8061
 ```
 
 **Terminal 2 - Start Frontend:**
