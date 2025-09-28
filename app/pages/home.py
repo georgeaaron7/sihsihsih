@@ -50,13 +50,13 @@ def create_home_page(dashboard):
                 dbc.Card([
                     dbc.CardBody([
                         html.Div([
-                            html.I(className="fas fa-ship fa-3x text-primary mb-3"),
+                            html.I(className="fas fa-ship fa-3x text-primary mb-3 fw-bold"),
                             html.H2(stats['total_floats'], className="text-primary mb-2"),
-                            html.H6("Active Floats", className="text-light mb-1"),
-                            html.Small("Monitoring Indian Ocean", className="text-muted")
+                            html.H6("Active Floats", className="text-light mb-1 fw-bold"),
+                            html.Small("Monitoring Indian Ocean", className="text-light")
                         ], className="text-center")
                     ])
-                ], className="bg-dark border-primary shadow-lg h-100")
+                ], className="bg-light border-primary shadow-lg h-100")
             ], md=3),
             dbc.Col([
                 dbc.Card([
@@ -64,8 +64,8 @@ def create_home_page(dashboard):
                         html.Div([
                             html.I(className="fas fa-thermometer-half fa-3x text-danger mb-3"),
                             html.H2(f"{stats['avg_temp']:.1f}°C", className="text-danger mb-2"),
-                            html.H6("Average Temperature", className="text-light mb-1"),
-                            html.Small("Surface waters", className="text-muted")
+                            html.H6("Average Temperature", className="text-light mb-1 fw-bold"),
+                            html.Small("Surface waters", className="text-light")
                         ], className="text-center")
                     ])
                 ], className="bg-dark border-danger shadow-lg h-100")
@@ -76,8 +76,8 @@ def create_home_page(dashboard):
                         html.Div([
                             html.I(className="fas fa-tint fa-3x text-info mb-3"),
                             html.H2(f"{stats['avg_salinity']:.1f}", className="text-info mb-2"),
-                            html.H6("Average Salinity", className="text-light mb-1"),
-                            html.Small("PSU (Practical Salinity Units)", className="text-muted")
+                            html.H6("Average Salinity", className="text-light mb-1 fw-bold"),
+                            html.Small("Practical Salinity Units", className="text-light")
                         ], className="text-center")
                     ])
                 ], className="bg-dark border-info shadow-lg h-100")
@@ -88,8 +88,8 @@ def create_home_page(dashboard):
                         html.Div([
                             html.I(className="fas fa-anchor fa-3x text-success mb-3"),
                             html.H2(f"{stats['max_depth']:.0f}m", className="text-success mb-2"),
-                            html.H6("Maximum Depth", className="text-light mb-1"),
-                            html.Small("Deepest measurement", className="text-muted")
+                            html.H6("Maximum Depth", className="text-light mb-1 fw-bold"),
+                            html.Small("Deepest measurement", className="text-light")
                         ], className="text-center")
                     ])
                 ], className="bg-dark border-success shadow-lg h-100")
@@ -115,25 +115,25 @@ def create_home_page(dashboard):
                             dbc.Col([
                                 html.Div([
                                     html.I(className="fas fa-arrows-alt-v fa-2x text-primary mb-3"),
-                                    html.H5("Autonomous Profiling", className="text-info"),
+                                    html.H5("Autonomous Profiling", className="text-info fw-bold"),
                                     html.P("Floats dive to 2000m depth, then surface to transmit data via satellite", 
-                                           className="text-muted small")
+                                           className="text-light small")
                                 ], className="text-center")
                             ], md=4),
                             dbc.Col([
                                 html.Div([
                                     html.I(className="fas fa-satellite fa-2x text-warning mb-3"),
-                                    html.H5("Real-time Data", className="text-info"),
+                                    html.H5("Real-time Data", className="text-info fw-bold"),
                                     html.P("Continuous monitoring provides real-time ocean condition updates", 
-                                           className="text-muted small")
+                                           className="text-light small")
                                 ], className="text-center")
                             ], md=4),
                             dbc.Col([
                                 html.Div([
                                     html.I(className="fas fa-globe fa-2x text-success mb-3"),
-                                    html.H5("Global Network", className="text-info"),
+                                    html.H5("Global Network", className="text-info fw-bold"),
                                     html.P("Over 4000 floats worldwide create comprehensive ocean coverage", 
-                                           className="text-muted small")
+                                           className="text-light small")
                                 ], className="text-center")
                             ], md=4)
                         ])
@@ -157,19 +157,21 @@ def create_home_page(dashboard):
                                 dbc.Card([
                                     dbc.CardBody([
                                         html.I(className="fas fa-cloud-sun fa-2x text-info mb-3"),
-                                        html.H6("Climate Monitoring", className="text-light"),
-                                        html.P("Track climate change through ocean temperature and salinity patterns", 
-                                               className="text-muted small mb-0")
+                                        html.H6("Climate Monitoring", className="text-light fw-bold"),
+                                        html.P(
+                                            "Track climate change through ocean temperature and salinity patterns", 
+                                            className="text-light small mb-0"
+                                        )
                                     ], className="text-center")
-                                ], className="bg-secondary border-0 h-100")
+                                ], className="bg-primary border-0 h-100")
                             ], md=6),
                             dbc.Col([
                                 dbc.Card([
                                     dbc.CardBody([
                                         html.I(className="fas fa-fish fa-2x text-success mb-3"),
-                                        html.H6("Marine Ecosystems", className="text-light"),
+                                        html.H6("Marine Ecosystems", className="text-light fw-bold"),
                                         html.P("Understand how ocean conditions affect marine life and ecosystems", 
-                                               className="text-muted small mb-0")
+                                               className="text-light small mb-0")
                                     ], className="text-center")
                                 ], className="bg-secondary border-0 h-100")
                             ], md=6)
@@ -180,9 +182,9 @@ def create_home_page(dashboard):
                                 dbc.Card([
                                     dbc.CardBody([
                                         html.I(className="fas fa-hurricane fa-2x text-danger mb-3"),
-                                        html.H6("Weather Prediction", className="text-light"),
+                                        html.H6("Weather Prediction", className="text-light fw-bold"),
                                         html.P("Improve weather forecasting and extreme event prediction", 
-                                               className="text-muted small mb-0")
+                                               className="text-light small mb-0")
                                     ], className="text-center")
                                 ], className="bg-secondary border-0 h-100")
                             ], md=6),
@@ -190,9 +192,9 @@ def create_home_page(dashboard):
                                 dbc.Card([
                                     dbc.CardBody([
                                         html.I(className="fas fa-shipping-fast fa-2x text-primary mb-3"),
-                                        html.H6("Maritime Safety", className="text-light"),
+                                        html.H6("Maritime Safety", className="text-light fw-bold"),
                                         html.P("Support safe navigation and maritime operations worldwide", 
-                                               className="text-muted small mb-0")
+                                               className="text-light small mb-0")
                                     ], className="text-center")
                                 ], className="bg-secondary border-0 h-100")
                             ], md=6)
@@ -218,10 +220,10 @@ def create_home_page(dashboard):
                             html.Strong("Interactive Table: "),
                             "Click on any row to select a float and view detailed analysis below. ",
                             "Use column filters to search specific data."
-                        ], color="dark", className="mb-3"),
+                        ], color="white", className="mb-3"),
                         create_data_table(float_info)
                     ])
-                ], className="bg-dark shadow-lg border-secondary")
+                ], className="bg-light shadow-lg border-secondary")
             ])
         ], className="mb-4"),
         

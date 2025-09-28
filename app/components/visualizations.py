@@ -197,11 +197,13 @@ def create_data_table(float_info):
             'textAlign': 'center', 
             'fontSize': '12px', 
             'padding': '12px',
-            'fontFamily': 'Segoe UI, Arial, sans-serif'
+            'fontFamily': 'Segoe UI, Arial, sans-serif',
+            'backgroundColor': 'black',
+            'color': 'white'
         },
         style_header={
             'backgroundColor': '#667eea',
-            'color': 'white',
+            'color': 'black',
             'fontWeight': 'bold',
             'textAlign': 'center',
             'fontSize': '13px',
@@ -210,24 +212,24 @@ def create_data_table(float_info):
         style_data_conditional=[
             {
                 'if': {'row_index': 'odd'},
-                'backgroundColor': '#f8f9fa'
+                'backgroundColor': 'black'
             },
             {
                 'if': {'column_id': 'AVG_TEMP', 'filter_query': '{AVG_TEMP} > 28'},
-                'backgroundColor': '#ffebee',
-                'color': '#c62828',
+                'backgroundColor': 'black',
+                'color': '#42a5f5',
                 'fontWeight': 'bold'
             },
             {
                 'if': {'column_id': 'AVG_TEMP', 'filter_query': '{AVG_TEMP} <= 24'},
-                'backgroundColor': '#e3f2fd',
-                'color': '#1565c0',
+                'backgroundColor': '#000000',
+                'color': '#000000',
                 'fontWeight': 'bold'
             },
             {
                 'if': {'state': 'selected'},
                 'backgroundColor': '#667eea !important',
-                'color': 'white',
+                'color': 'black',
             }
         ],
         page_size=12,
@@ -240,7 +242,7 @@ def create_data_table(float_info):
         },
         css=[{
             'selector': '.dash-table-tooltip',
-            'rule': 'background-color: #667eea; color: white;'
+            'rule': 'background-color: #667eea; color: black;'
         }]
     )
 
