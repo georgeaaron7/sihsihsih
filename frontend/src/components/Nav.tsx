@@ -26,11 +26,13 @@ const Nav: React.FC = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-8 h-8 bg-gradient-to-br from-ocean-500 to-ocean-700 rounded-full flex items-center justify-center">
-              <span className="text-white font-bold text-sm">A</span>
-            </div>
+            <img 
+              src="/images/logo.png" 
+              alt="WavOps Logo" 
+              className="w-8 h-8 object-contain"
+            />
             <span className="text-xl font-bold text-white group-hover:text-ocean-400 transition-colors">
-              Argo Dashboard
+              WavOps
             </span>
           </Link>
 

@@ -11,10 +11,12 @@ const Footer: React.FC = () => {
           {/* Brand */}
           <div className="space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-gradient-to-br from-ocean-500 to-ocean-700 rounded-full flex items-center justify-center">
-                <span className="text-white font-bold text-sm">A</span>
-              </div>
-              <span className="text-xl font-bold text-white">Argo Dashboard</span>
+              <img 
+                src="/images/logo.png" 
+                alt="WavOps Logo" 
+                className="w-8 h-8 object-contain"
+              />
+              <span className="text-xl font-bold text-white">WavOps</span>
             </div>
             <p className="text-gray-400 text-sm">
               Interactive visualization of oceanographic data from Argo floats across the Indian Ocean.
@@ -100,9 +102,7 @@ const Footer: React.FC = () => {
             © {currentYear} Argo Float Dashboard. Built for oceanographic research.
           </p>
           <div className="flex items-center gap-2 text-gray-400 text-sm">
-            <span>Made with</span>
-            <Heart className="w-4 h-4 text-red-500" fill="currentColor" />
-            <span>by NITW Team</span>
+            <span>Made by Anuprabh, Manvitha, Aaron, Shreeya, Ashish and Disha.</span>
           </div>
         </div>
       </div>
