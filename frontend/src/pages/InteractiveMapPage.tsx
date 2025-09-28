@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Thermometer, Droplets, Activity, Filter, Search, Maximize2, Info } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
@@ -7,8 +7,8 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import ErrorBoundary from '../components/ErrorBoundary';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
-import { LatLngExpression, Icon, divIcon } from 'leaflet';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { LatLngExpression,divIcon } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
 interface MapFilters {

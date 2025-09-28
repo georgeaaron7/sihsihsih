@@ -1,56 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import Lottie from 'lottie-react';
 import { Play, ChevronRight } from 'lucide-react';
 
-// Sample Lottie animation data for logo (replace with actual logo.json)
-const sampleLogoAnimation = {
-  v: "5.7.4",
-  fr: 60,
-  ip: 0,
-  op: 120,
-  w: 200,
-  h: 200,
-  nm: "Argo Logo",
-  ddd: 0,
-  assets: [],
-  layers: [
-    {
-      ddd: 0,
-      ind: 1,
-      ty: 4,
-      nm: "Circle",
-      sr: 1,
-      ks: {
-        o: { a: 0, k: 100 },
-        r: { a: 1, k: [
-          { i: { x: [0.833], y: [0.833] }, o: { x: [0.167], y: [0.167] }, t: 0, s: [0] },
-          { t: 120, s: [360] }
-        ]},
-        p: { a: 0, k: [100, 100, 0] },
-        a: { a: 0, k: [0, 0, 0] },
-        s: { a: 0, k: [100, 100, 100] }
-      },
-      ao: 0,
-      shapes: [
-        {
-          ty: "el",
-          p: { a: 0, k: [0, 0] },
-          s: { a: 0, k: [80, 80] }
-        },
-        {
-          ty: "fl",
-          c: { a: 0, k: [0.054, 0.647, 0.914, 1] },
-          o: { a: 0, k: 100 }
-        }
-      ],
-      ip: 0,
-      op: 120,
-      st: 0
-    }
-  ]
-};
 
 interface LandingHeroProps {
   videoSrc?: string;
@@ -67,11 +19,7 @@ const LandingHero: React.FC<LandingHeroProps> = ({
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoLoaded, setVideoLoaded] = useState(false);
   const [showPlayButton, setShowPlayButton] = useState(false);
-  const [logoAnimationComplete, setLogoAnimationComplete] = useState(false);
   
-  // Check for reduced motion preference
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const isMobile = window.innerWidth < 768;
 
   useEffect(() => {
     const video = videoRef.current;
@@ -137,17 +85,6 @@ const LandingHero: React.FC<LandingHeroProps> = ({
     }
   };
 
-  const logoVariants = {
-    hidden: { opacity: 0, scale: 0.8 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: {
-        duration: 1,
-        ease: "easeOut"
-      }
-    }
-  };
 
   return (
     <motion.section

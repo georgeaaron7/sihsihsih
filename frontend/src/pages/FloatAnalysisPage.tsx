@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ScatterChart, Scatter, Area, AreaChart } from 'recharts';
 import { TrendingUp, Thermometer, Droplets, Activity, Calendar, BarChart3, Map, Download } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
-import { argoApi, FloatInfo, ProfileData, TemperatureSeries } from '../lib/apiClient';
+import { argoApi, ProfileData } from '../lib/apiClient';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ErrorBoundary from '../components/ErrorBoundary';
 import Nav from '../components/Nav';
