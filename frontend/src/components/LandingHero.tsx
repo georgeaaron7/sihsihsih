@@ -59,7 +59,7 @@ interface LandingHeroProps {
 }
 
 const LandingHero: React.FC<LandingHeroProps> = ({
-  videoSrc = '/videos/ocean-background.mp4',
+  videoSrc = '/videos/video.mp4',
   posterSrc = '/images/ocean-poster.jpg',
   blurredPosterSrc = '/images/ocean-poster-blur.jpg'
 }) => {
@@ -254,9 +254,7 @@ const LandingHero: React.FC<LandingHeroProps> = ({
                 <ChevronRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
               </button>
               
-              <button className="btn-secondary text-lg px-8 py-4">
-                Learn More
-              </button>
+              {/* Learn More button removed */}
             </motion.div>
 
             {/* Stats */}
@@ -281,74 +279,11 @@ const LandingHero: React.FC<LandingHeroProps> = ({
             </motion.div>
           </motion.div>
 
-          {/* Right side - Logo animation */}
-          <motion.div
-            className="flex justify-center lg:justify-end"
-            variants={logoVariants}
-            initial="hidden"
-            animate="visible"
-          >
-            <div className="relative">
-              {(!prefersReducedMotion && !isMobile) ? (
-                <Lottie
-                  animationData={sampleLogoAnimation}
-                  className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96"
-                  loop={logoAnimationComplete}
-                  autoplay={true}
-                  onComplete={() => setLogoAnimationComplete(true)}
-                />
-              ) : (
-                // Static logo for reduced motion or mobile
-                <div className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 bg-gradient-to-br from-ocean-500 to-ocean-700 rounded-full flex items-center justify-center">
-                  <div className="text-white text-6xl md:text-8xl font-bold">A</div>
-                </div>
-              )}
-              
-              {/* Floating particles effect */}
-              {!prefersReducedMotion && (
-                <div className="absolute inset-0 pointer-events-none">
-                  {[...Array(6)].map((_, i) => (
-                    <motion.div
-                      key={i}
-                      className="absolute w-2 h-2 bg-ocean-400 rounded-full opacity-60"
-                      style={{
-                        left: `${20 + i * 10}%`,
-                        top: `${30 + (i % 3) * 20}%`,
-                      }}
-                      animate={{
-                        y: [-10, 10, -10],
-                        opacity: [0.6, 1, 0.6],
-                      }}
-                      transition={{
-                        duration: 3 + i * 0.5,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                      }}
-                    />
-                  ))}
-                </div>
-              )}
-            </div>
-          </motion.div>
+          {/* ...removed blue dots and circle... */}
         </div>
       </div>
 
-      {/* Scroll indicator */}
-      <motion.div
-        className="absolute bottom-8 right-8 text-white/60"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2 }}
-      >
-        <div className="flex flex-col items-center gap-2">
-          <span className="text-sm">Scroll to explore</span>
-          <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
-            className="w-1 h-8 bg-gradient-to-b from-transparent via-white to-transparent opacity-60"
-          />
-        </div>
-      </motion.div>
+      {/* Scroll indicator removed */}
     </motion.section>
   );
 };
