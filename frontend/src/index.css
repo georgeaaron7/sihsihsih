@@ -1,0 +1,102 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-gray-200;
+  }
+  
+  body {
+    @apply bg-deep-950 text-white antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-gradient-to-r from-ocean-600 to-ocean-500 hover:from-ocean-700 hover:to-ocean-600 
+           text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 
+           shadow-lg hover:shadow-xl hover:shadow-ocean-500/25 transform hover:-translate-y-1
+           focus:outline-none focus:ring-2 focus:ring-ocean-400 focus:ring-offset-2 focus:ring-offset-deep-950;
+  }
+
+  .btn-secondary {
+    @apply bg-deep-800 hover:bg-deep-700 text-white px-6 py-3 rounded-lg font-medium 
+           transition-all duration-300 border border-deep-600 hover:border-deep-500
+           focus:outline-none focus:ring-2 focus:ring-deep-400 focus:ring-offset-2 focus:ring-offset-deep-950;
+  }
+
+  .card {
+    @apply bg-gradient-to-br from-deep-900 to-deep-800 border border-deep-700 
+           rounded-xl shadow-xl backdrop-blur-sm hover:shadow-2xl hover:shadow-ocean-900/20
+           transition-all duration-300 hover:-translate-y-1;
+  }
+
+  .glass {
+    @apply bg-deep-900/60 backdrop-blur-md border border-deep-700/50;
+  }
+
+  .ocean-gradient {
+    background: linear-gradient(135deg, #0c4a6e 0%, #0369a1 50%, #0ea5e9 100%);
+  }
+
+  .loading-spinner {
+    @apply animate-spin rounded-full h-8 w-8 border-b-2 border-ocean-500;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-r from-ocean-400 to-ocean-600 bg-clip-text text-transparent;
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: #0ea5e9 #1e293b;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    @apply bg-deep-800 rounded-full;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    @apply bg-ocean-500 rounded-full hover:bg-ocean-400;
+  }
+}
