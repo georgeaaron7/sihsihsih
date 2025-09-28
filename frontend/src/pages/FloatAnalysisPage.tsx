@@ -20,10 +20,10 @@ const FloatAnalysisPage: React.FC = () => {
     staleTime: 5 * 60 * 1000,
   });
 
-  // Get selected float details
+  // Get selected float profiles
   const { data: floatDetails, isLoading: detailsLoading } = useQuery({
-    queryKey: ['float-details', selectedFloatId],
-    queryFn: () => selectedFloatId ? argoApi.getFloatDetails(selectedFloatId) : null,
+    queryKey: ['float-profiles', selectedFloatId],
+    queryFn: () => selectedFloatId ? argoApi.getFloatProfiles(selectedFloatId) : null,
     enabled: !!selectedFloatId,
   });
 
@@ -36,45 +36,65 @@ const FloatAnalysisPage: React.FC = () => {
 
   // Process profile data for charts
   const profileChartData = useMemo(() => {
-    if (!floatDetails?.profiles || floatDetails.profiles.length === 0) {
+    if (!floatDetails || !Array.isArray(floatDetails) || floatDetails.length === 0) {
       return { temperature: [], salinity: [], tsData: [] };
     }
 
-    const profiles = floatDetails.profiles;
-    const latestCycle = Math.max(...profiles.map(p => p.CYCLE_NUMBER));
-    const latestProfile = profiles.filter(p => p.CYCLE_NUMBER === latestCycle);
+    // Find the latest cycle
+    const latestCycle = Math.max(...floatDetails.map((p: ProfileData) => p.CYCLE_NUMBER));
+    const latestProfile = floatDetails.filter((p: ProfileData) => p.CYCLE_NUMBER === latestCycle);
 
     // Sort by pressure (depth) and filter out invalid data
     const sortedProfile = latestProfile
-      .filter(p => p.PRES >= 0 && !isNaN(p.PRES) && !isNaN(p.TEMP) && !isNaN(p.PSAL))
-      .sort((a, b) => a.PRES - b.PRES);
+      .filter((p: ProfileData) => p.PRES >= 0 && !isNaN(p.PRES) && !isNaN(p.TEMP) && !isNaN(p.PSAL))
+      .sort((a: ProfileData, b: ProfileData) => a.PRES - b.PRES);
+
+    console.log('Sorted Profile Data:', sortedProfile); // Debug log
 
     const temperature = sortedProfile
-      .filter(p => p.TEMP !== null && p.TEMP !== undefined)
-      .map(p => ({
-        depth: -p.PRES, // Negative for proper depth display
+      .filter((p: ProfileData) => p.TEMP !== null && p.TEMP !== undefined)
+      .map((p: ProfileData) => ({
+        depth: p.PRES, // Using positive depth values
         temperature: Number(p.TEMP.toFixed(2)),
         pressure: p.PRES
       }));
 
     const salinity = sortedProfile
-      .filter(p => p.PSAL !== null && p.PSAL !== undefined)
-      .map(p => ({
-        depth: -p.PRES,
+      .filter((p: ProfileData) => p.PSAL !== null && p.PSAL !== undefined)
+      .map((p: ProfileData) => ({
+        depth: p.PRES,
         salinity: Number(p.PSAL.toFixed(3)),
         pressure: p.PRES
       }));
 
     const tsData = sortedProfile
-      .filter(p => p.TEMP !== null && p.TEMP !== undefined && p.PSAL !== null && p.PSAL !== undefined)
-      .map(p => ({
+      .filter((p: ProfileData) => p.TEMP !== null && p.TEMP !== undefined && p.PSAL !== null && p.PSAL !== undefined)
+      .map((p: ProfileData) => ({
         salinity: Number(p.PSAL.toFixed(3)),
         temperature: Number(p.TEMP.toFixed(2)),
         pressure: p.PRES
       }));
 
+    console.log('Processed Chart Data:', { temperature, salinity, tsData }); // Debug log
+
     return { temperature, salinity, tsData };
   }, [floatDetails]);
+
+  // Quick stats for debugging plotting issues (counts, min/max depths)
+  const profileStats = useMemo(() => {
+    const temp = profileChartData.temperature || [];
+    const sal = profileChartData.salinity || [];
+
+    const sample = (arr: any[]) => ({
+      count: arr.length,
+      minDepth: arr.length ? Math.min(...arr.map(d => d.depth)) : 0,
+      maxDepth: arr.length ? Math.max(...arr.map(d => d.depth)) : 0,
+      first: arr.length ? arr[0] : null,
+      last: arr.length ? arr[arr.length - 1] : null,
+    });
+
+    return { temperature: sample(temp), salinity: sample(sal) };
+  }, [profileChartData]);
 
   // Process time series data
   const timeSeriesData = useMemo(() => {
@@ -285,7 +305,17 @@ const FloatAnalysisPage: React.FC = () => {
                 <div className="space-y-8">
                   {/* Vertical Profiles */}
                   {analysisType === 'profiles' && (
-                    <div className="grid lg:grid-cols-2 gap-8">
+                    <>
+                      <div className="mb-4">
+                        <div className="bg-deep-900 text-gray-200 rounded-md p-3 text-sm">
+                          <div className="font-medium text-white mb-2">Profile data debug</div>
+                          <div>Temperature points: {profileStats.temperature.count}</div>
+                          <div>Temp depth range: {profileStats.temperature.minDepth}m - {profileStats.temperature.maxDepth}m</div>
+                          <div>Salinity points: {profileStats.salinity.count}</div>
+                          <div>Sal depth range: {profileStats.salinity.minDepth}m - {profileStats.salinity.maxDepth}m</div>
+                        </div>
+                      </div>
+                      <div className="grid lg:grid-cols-2 gap-8">
                       {/* Temperature Profile */}
                       <div className="bg-deep-800 rounded-xl border border-deep-700 p-6">
                         <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
@@ -299,17 +329,20 @@ const FloatAnalysisPage: React.FC = () => {
                               <XAxis 
                                 dataKey="temperature" 
                                 stroke="#9CA3AF"
-                                domain={['dataMin', 'dataMax']}
+                                domain={['auto', 'auto']}
                                 type="number"
+                                tickCount={8}
                                 tickFormatter={(value) => `${value.toFixed(1)}°C`}
                                 label={{ value: 'Temperature (°C)', position: 'insideBottom', offset: -10 }}
                               />
                               <YAxis 
                                 dataKey="depth" 
                                 stroke="#9CA3AF"
-                                domain={['dataMin', 'dataMax']}
+                                domain={[0, 'dataMax']}
                                 type="number"
-                                tickFormatter={(value) => `${Math.abs(value).toFixed(0)}m`}
+                                reversed={true}
+                                tickCount={10}
+                                tickFormatter={(value) => `${value.toFixed(0)}m`}
                                 label={{ value: 'Depth (m)', angle: -90, position: 'insideLeft' }}
                               />
                               <Tooltip 
@@ -319,15 +352,24 @@ const FloatAnalysisPage: React.FC = () => {
                                   borderRadius: '8px'
                                 }}
                                 labelStyle={{ color: '#F3F4F6' }}
-                                formatter={(value: any, name: string) => [
-                                  name === 'temperature' ? `${value.toFixed(1)}°C` : value,
-                                  name === 'temperature' ? 'Temperature' : name
-                                ]}
-                                labelFormatter={(label) => `Depth: ${Math.abs(Number(label)).toFixed(0)}m`}
+                                formatter={(value: any, name: string, props: any) => {
+                                  // value is the y-value (depth). Extract temperature from payload for display
+                                  const temp = props && props.payload && props.payload.temperature;
+                                  if (temp !== undefined) {
+                                    return [`${temp.toFixed(2)}°C`, 'Temperature'];
+                                  }
+                                  return [`${value}`, name];
+                                }}
+                                labelFormatter={(_label, payload) => {
+                                  if (payload && payload[0]) {
+                                    return `Depth: ${payload[0].payload.depth.toFixed(0)}m`;
+                                  }
+                                  return '';
+                                }}
                               />
                               <Line 
                                 type="monotone" 
-                                dataKey="temperature" 
+                                dataKey="depth" 
                                 stroke="#EF4444" 
                                 strokeWidth={3}
                                 dot={{ fill: '#EF4444', strokeWidth: 2, r: 4 }}
@@ -351,17 +393,20 @@ const FloatAnalysisPage: React.FC = () => {
                               <XAxis 
                                 dataKey="salinity" 
                                 stroke="#9CA3AF"
-                                domain={['dataMin', 'dataMax']}
+                                domain={['auto', 'auto']}
                                 type="number"
+                                tickCount={8}
                                 tickFormatter={(value) => `${value.toFixed(1)} PSU`}
                                 label={{ value: 'Salinity (PSU)', position: 'insideBottom', offset: -10 }}
                               />
                               <YAxis 
                                 dataKey="depth" 
                                 stroke="#9CA3AF"
-                                domain={['dataMin', 'dataMax']}
+                                domain={[0, 'dataMax']}
                                 type="number"
-                                tickFormatter={(value) => `${Math.abs(value).toFixed(0)}m`}
+                                reversed={true}
+                                tickCount={10}
+                                tickFormatter={(value) => `${value.toFixed(0)}m`}
                                 label={{ value: 'Depth (m)', angle: -90, position: 'insideLeft' }}
                               />
                               <Tooltip 
@@ -371,15 +416,24 @@ const FloatAnalysisPage: React.FC = () => {
                                   borderRadius: '8px'
                                 }}
                                 labelStyle={{ color: '#F3F4F6' }}
-                                formatter={(value: any, name: string) => [
-                                  name === 'salinity' ? `${value.toFixed(2)} PSU` : value,
-                                  name === 'salinity' ? 'Salinity' : name
-                                ]}
-                                labelFormatter={(label) => `Depth: ${Math.abs(Number(label)).toFixed(0)}m`}
+                                formatter={(value: any, name: string, props: any) => {
+                                  // value is the y-value (depth). Extract salinity from payload for display
+                                  const sal = props && props.payload && props.payload.salinity;
+                                  if (sal !== undefined) {
+                                    return [`${sal.toFixed(3)} PSU`, 'Salinity'];
+                                  }
+                                  return [`${value}`, name];
+                                }}
+                                labelFormatter={(_label, payload) => {
+                                  if (payload && payload[0]) {
+                                    return `Depth: ${payload[0].payload.depth.toFixed(0)}m`;
+                                  }
+                                  return '';
+                                }}
                               />
                               <Line 
                                 type="monotone" 
-                                dataKey="salinity" 
+                                dataKey="depth" 
                                 stroke="#3B82F6" 
                                 strokeWidth={3}
                                 dot={{ fill: '#3B82F6', strokeWidth: 2, r: 4 }}
@@ -390,6 +444,7 @@ const FloatAnalysisPage: React.FC = () => {
                         </div>
                       </div>
                     </div>
+                    </>
                   )}
 
                   {/* Time Series */}

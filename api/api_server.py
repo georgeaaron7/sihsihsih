@@ -379,10 +379,17 @@ async def get_temperature_series(platform_number: int):
         
         # Format dates and round numbers
         for record in series_data:
-            record['date'] = record['JULD'].isoformat()
+            # Handle date conversion
+            if isinstance(record['JULD'], (datetime, pd.Timestamp)):
+                record['date'] = record['JULD'].isoformat()
+            else:
+                record['date'] = str(record['JULD'])  # Ensure it's a string
+                
+            # Clean up numeric values
             record['cycle'] = int(record['CYCLE_NUMBER'])
             record['temperature'] = round(float(record['TEMP']), 2)
             record['depth'] = round(float(record['PRES']), 1)
+            
             # Remove original columns
             del record['JULD'], record['CYCLE_NUMBER'], record['TEMP'], record['PRES']
         
