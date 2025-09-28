@@ -145,3 +145,13 @@
 2025-09-28 12:14:40,486 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/stats
 2025-09-28 12:14:42,492 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/stats
 2025-09-28 12:14:46,499 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/stats
+2025-09-28 17:11:15,008 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/floats?region=
+2025-09-28 17:11:15,014 - api_server - INFO - ⚡ Response: 200 | Time: 0.006s | Path: /floats
+2025-09-28 17:11:17,488 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/floats
+2025-09-28 17:11:17,490 - api_server - INFO - ⚡ Response: 200 | Time: 0.002s | Path: /floats
+2025-09-28 17:11:18,630 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/floats/1234567/profiles
+2025-09-28 17:11:18,658 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/floats/1234567/temperature-series
+2025-09-28 17:11:18,666 - api_server - INFO - ⚡ Response: 200 | Time: 0.035s | Path: /floats/1234567/profiles
+2025-09-28 17:11:18,666 - api_server - INFO - ⚡ Response: 200 | Time: 0.009s | Path: /floats/1234567/temperature-series
+2025-09-28 17:13:51,507 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/floats?region=
+2025-09-28 17:13:51,510 - api_server - INFO - ⚡ Response: 200 | Time: 0.003s | Path: /floats

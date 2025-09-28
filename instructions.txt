@@ -1,0 +1,3 @@
+1. Always ensure that the venv is active before running. Run the command: source venv/bin/activate
+2. For downloading libraries, use pip3 instead of pip.
+3. For running scripts, use python3 instead of python.
