@@ -31,14 +31,14 @@ const FloatDetailPage: React.FC = () => {
     enabled: !!floatId,
   });
 
-  // const {
-  //   data: temperatureSeries,
-  //   isLoading: seriesLoading
-  // } = useQuery({
-  //   queryKey: ['temperatureSeries', floatId],
-  //   queryFn: () => argoApi.getTemperatureSeries(floatId),
-  //   enabled: !!floatId,
-  // });
+  const {
+    data: temperatureSeries,
+    isLoading: seriesLoading
+  } = useQuery({
+    queryKey: ['temperatureSeries', floatId],
+    queryFn: () => argoApi.getTemperatureSeries(floatId),
+    enabled: !!floatId,
+  });
 
   if (isLoading) {
     return (
@@ -204,7 +204,7 @@ const FloatDetailPage: React.FC = () => {
                 )}
               </div>
 
-              {/* Temperature Series Chart
+              {/* Temperature Series Chart */}
               <div className="card p-6">
                 <h2 className="text-xl font-bold text-white mb-6">Temperature Time Series</h2>
                 
@@ -223,7 +223,7 @@ const FloatDetailPage: React.FC = () => {
                 ) : (
                   <p className="text-gray-400 text-center py-8">No temperature series data available</p>
                 )}
-              </div> */}
+              </div>
             </div>
           </div>
         </main>

@@ -153,7 +153,7 @@ async def log_float_click(platform_number: int, request: Request):
         logger.info(f"🎯 FLOAT CLICK EVENT - Platform: {platform_number} | IP: {client_ip} | User-Agent: {user_agent[:50]}...")
         
         # Get float information
-        float_info = dashboard.sample_data['float_info']
+        float_info = dashboard.get_float_info()
         float_data = float_info[float_info['PLATFORM_NUMBER'] == platform_number]
         
         if float_data.empty:
@@ -194,15 +194,14 @@ async def get_float_details(platform_number: int):
         logger.info(f"📊 Fetching details for float {platform_number}")
         
         # Get float basic info
-        float_info = dashboard.sample_data['float_info']
+        float_info = dashboard.get_float_info()
         float_data = float_info[float_info['PLATFORM_NUMBER'] == platform_number]
         
         if float_data.empty:
             raise HTTPException(status_code=404, detail=f"Float {platform_number} not found")
         
-        # Get profile data for specific float from dashboard sample data
-        all_profile_data = dashboard.sample_data['profile_data']
-        profile_data = all_profile_data[all_profile_data['PLATFORM_NUMBER'] == platform_number]
+        # Get profile data
+        profile_data = dashboard.get_float_profile_data(platform_number)
         
         float_record = float_data.iloc[0].to_dict()
         if 'LAST_DATE' in float_record:
@@ -243,7 +242,7 @@ async def get_all_floats(
 ):
     """Get all float information with optional filters"""
     try:
-        float_info = dashboard.sample_data['float_info']
+        float_info = dashboard.get_float_info()
         
         # Apply filters
         if region:
@@ -274,7 +273,7 @@ async def get_all_floats(
 async def get_float(platform_number: int):
     """Get information for a specific float"""
     try:
-        float_info = dashboard.sample_data['float_info']
+        float_info = dashboard.get_float_info()
         float_data = float_info[float_info['PLATFORM_NUMBER'] == platform_number]
         
         if float_data.empty:
@@ -302,9 +301,7 @@ async def get_float_profiles(
 ):
     """Get profile data for a specific float"""
     try:
-        # Get profile data for specific float from dashboard sample data
-        all_profile_data = dashboard.sample_data['profile_data']
-        profile_data = all_profile_data[all_profile_data['PLATFORM_NUMBER'] == platform_number]
+        profile_data = dashboard.get_float_profile_data(platform_number)
         
         if profile_data.empty:
             raise HTTPException(status_code=404, detail="No profile data found for this float")
@@ -361,9 +358,7 @@ async def get_summary_stats():
 async def get_temperature_series(platform_number: int):
     """Get temperature time series for a specific float"""
     try:
-        # Get profile data for specific float from dashboard sample data
-        all_profile_data = dashboard.sample_data['profile_data']
-        profile_data = all_profile_data[all_profile_data['PLATFORM_NUMBER'] == platform_number]
+        profile_data = dashboard.get_float_profile_data(platform_number)
         
         if profile_data.empty:
             raise HTTPException(status_code=404, detail="No data found for this float")
@@ -379,16 +374,24 @@ async def get_temperature_series(platform_number: int):
         
         time_series = time_series.sort_values('JULD')
         
-        # Format the data properly
-        series_data = []
-        for _, row in time_series.iterrows():
-            record = {
-                'date': row['JULD'].isoformat() if hasattr(row['JULD'], 'isoformat') else str(row['JULD']),
-                'cycle': int(row['CYCLE_NUMBER']),
-                'temperature': round(float(row['TEMP']), 2),
-                'depth': round(float(row['PRES']), 1)
-            }
-            series_data.append(record)
+        # Convert to dict and clean numpy types
+        series_data = to_native(time_series.to_dict('records'))
+        
+        # Format dates and round numbers
+        for record in series_data:
+            # Handle date conversion
+            if isinstance(record['JULD'], (datetime, pd.Timestamp)):
+                record['date'] = record['JULD'].isoformat()
+            else:
+                record['date'] = str(record['JULD'])  # Ensure it's a string
+                
+            # Clean up numeric values
+            record['cycle'] = int(record['CYCLE_NUMBER'])
+            record['temperature'] = round(float(record['TEMP']), 2)
+            record['depth'] = round(float(record['PRES']), 1)
+            
+            # Remove original columns
+            del record['JULD'], record['CYCLE_NUMBER'], record['TEMP'], record['PRES']
         
         return APIResponse(
             success=True,
@@ -405,8 +408,8 @@ async def get_temperature_series(platform_number: int):
 async def get_latest_profiles():
     """Get the latest profile for each float"""
     try:
-        float_info = dashboard.sample_data['float_info']
-        profile_data = dashboard.sample_data['profile_data']
+        float_info = dashboard.get_float_info()
+        profile_data = dashboard.get_profile_data()
         
         latest_profiles = []
         
@@ -452,15 +455,14 @@ async def export_data(
         
         # Get data based on type
         if data_type == "float_info":
-            data = dashboard.sample_data['float_info']
+            data = dashboard.get_float_info()
             if platform_number:
                 data = data[data['PLATFORM_NUMBER'] == platform_number]
         elif data_type == "profiles":
             if platform_number:
-                all_profile_data = dashboard.sample_data['profile_data']
-                data = all_profile_data[all_profile_data['PLATFORM_NUMBER'] == platform_number]
+                data = dashboard.get_float_profile_data(platform_number)
             else:
-                data = dashboard.sample_data['profile_data']
+                data = dashboard.get_profile_data()
         else:
             raise HTTPException(status_code=400, detail="Supported data_type: float_info, profiles")
         
