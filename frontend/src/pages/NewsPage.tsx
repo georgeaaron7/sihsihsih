@@ -29,95 +29,48 @@ const NewsPage: React.FC = () => {
   }, []);
 
   const fetchNews = async () => {
-    try {
-      setLoading(true);
-      // In a real implementation, you would fetch from news APIs or your backend
-      // For now, we'll use mock data
-      const mockNews: NewsArticle[] = [
-        {
-          id: '1',
-          title: 'Major Breakthrough in Ocean Temperature Monitoring',
-          summary: 'Scientists develop new autonomous sensors that can track temperature changes with unprecedented accuracy.',
-          content: 'Researchers have unveiled a revolutionary sensor technology that can monitor ocean temperature variations...',
-          source: 'Ocean Research Institute',
-          publishedAt: '2024-01-15T10:30:00Z',
-          category: 'research',
-          importance: 'high',
-          imageUrl: '/images/ocean-sensors.jpg',
-          url: 'https://example.com/ocean-sensors'
-        },
-        {
-          id: '2',
-          title: 'Argo Float Network Expands to Cover Arctic Waters',
-          summary: 'New deployment of 200 Argo floats in the Arctic Ocean provides critical climate data.',
-          content: 'The global Argo float network has expanded its coverage to include previously unmapped Arctic regions...',
-          source: 'Arctic Climate Research Center',
-          publishedAt: '2024-01-14T14:20:00Z',
-          category: 'oceanography',
-          importance: 'high',
-          imageUrl: '/images/arctic-floats.jpg',
-          url: 'https://example.com/arctic-expansion'
-        },
-        {
-          id: '3',
-          title: 'AI-Powered Maritime Traffic Optimization',
-          summary: 'New AI system reduces fuel consumption and emissions in global shipping routes.',
-          content: 'A groundbreaking artificial intelligence system is transforming maritime logistics...',
-          source: 'Maritime Technology Review',
-          publishedAt: '2024-01-13T09:15:00Z',
-          category: 'technology',
-          importance: 'medium',
-          imageUrl: '/images/ai-maritime.jpg',
-          url: 'https://example.com/ai-maritime'
-        },
-        {
-          id: '4',
-          title: 'Ocean Acidification Reaches Critical Levels',
-          summary: 'Latest measurements show accelerating ocean acidification threatening marine ecosystems.',
-          content: 'New data from the global ocean monitoring network reveals alarming trends in ocean pH levels...',
-          source: 'Climate Science Today',
-          publishedAt: '2024-01-12T16:45:00Z',
-          category: 'climate',
-          importance: 'high',
-          imageUrl: '/images/ocean-acidification.jpg',
-          url: 'https://example.com/ocean-acidification'
-        },
-        {
-          id: '5',
-          title: 'Revolutionary Deep-Sea Exploration Vehicle Launched',
-          summary: 'New submersible can reach depths of 12,000 meters with advanced scientific equipment.',
-          content: 'The latest addition to deep-sea exploration technology promises to unlock ocean mysteries...',
-          source: 'Deep Sea Research Foundation',
-          publishedAt: '2024-01-11T12:00:00Z',
-          category: 'technology',
-          importance: 'medium',
-          imageUrl: '/images/deep-sea-vehicle.jpg',
-          url: 'https://example.com/deep-sea-vehicle'
-        },
-        {
-          id: '6',
-          title: 'Sustainable Maritime Fuel Initiative Gains Momentum',
-          summary: 'International shipping companies commit to 50% reduction in carbon emissions by 2030.',
-          content: 'A coalition of major shipping companies has announced ambitious targets for reducing maritime emissions...',
-          source: 'Green Maritime Alliance',
-          publishedAt: '2024-01-10T08:30:00Z',
-          category: 'maritime',
-          importance: 'medium',
-          imageUrl: '/images/green-shipping.jpg',
-          url: 'https://example.com/green-shipping'
-        }
-      ];
+  try {
+    setLoading(true);
+    setError(null);
 
-      // Simulate API delay
-      setTimeout(() => {
-        setArticles(mockNews);
-        setLoading(false);
-      }, 1000);
-    } catch (err) {
-      setError('Failed to fetch news articles');
-      setLoading(false);
+    const API_KEY = 'f59e5da706a54cbe860ad58c679bbbae';
+    const query = 'ocean OR maritime OR climate OR research OR technology';
+    const pageSize = 50;
+    const url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(query)}&language=en&pageSize=${pageSize}&apiKey=${API_KEY}`;
+
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (data.status !== 'ok') {
+      throw new Error(data.message || 'Failed to fetch news');
     }
-  };
+
+    // Transform NewsAPI articles to your NewsArticle type
+    const transformedArticles: NewsArticle[] = data.articles.map((article: any, index: number) => ({
+  id: index.toString(),
+  title: article.title,
+  summary: article.description || '',
+  content: article.content || '',
+  source: article.source.name || 'Unknown',
+  publishedAt: article.publishedAt,
+  category: article.title.toLowerCase().includes('maritime') ? 'maritime'
+               : article.title.toLowerCase().includes('ocean') ? 'oceanography'
+               : article.title.toLowerCase().includes('climate') ? 'climate'
+               : article.title.toLowerCase().includes('research') ? 'research'
+               : 'technology',
+  importance: 'medium',
+  imageUrl: article.urlToImage,  // <-- here
+  url: article.url,
+}))
+
+    setArticles(transformedArticles);
+    setLoading(false);
+  } catch (err: any) {
+    setError(err.message);
+    setLoading(false);
+  }
+};
+
 
   const categories = [
     { key: 'all', label: 'All News', icon: Globe },
@@ -246,9 +199,17 @@ const NewsPage: React.FC = () => {
               className="bg-deep-800 rounded-xl border border-deep-700 overflow-hidden hover:border-ocean-500/50 transition-all duration-300 group"
             >
               {/* Article Image */}
-              <div className="aspect-video bg-gradient-to-br from-ocean-900 to-deep-900 flex items-center justify-center">
+            <div className="aspect-video bg-gray-800 flex items-center justify-center overflow-hidden">
+              {article.imageUrl ? (
+                <img
+                  src={article.imageUrl}
+                  alt={article.title}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
                 <Waves className="w-12 h-12 text-ocean-400/50" />
-              </div>
+              )}
+            </div>
 
               <div className="p-6">
                 {/* Category and Importance */}
