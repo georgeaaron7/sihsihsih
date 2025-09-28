@@ -67,3 +67,4 @@ temp/
 
 # Local development
 .local
+__pycache__/

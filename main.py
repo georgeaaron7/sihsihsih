@@ -502,4 +502,4 @@ if __name__ == '__main__':
     print("\n👥 Team: Anuprabh, Aaron, Manvitha, Shreeya, Ashish, Disha")
     print("="*70)
     
-    app.run_server(debug=True, port=8060, host='127.0.0.1')
+    app.run(debug=True, port=8060, host='127.0.0.1')

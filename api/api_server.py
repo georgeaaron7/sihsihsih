@@ -12,6 +12,25 @@ import pandas as pd
 from datetime import datetime
 import uvicorn
 import logging
+import numpy as np
+import pandas as pd
+from datetime import datetime
+
+def to_native(obj):
+    """Recursively convert numpy/pandas scalars to Python native types."""
+    if isinstance(obj, (np.generic,)):
+        return obj.item()
+    elif isinstance(obj, pd.Timestamp):
+        return obj.isoformat()
+    elif isinstance(obj, datetime):
+        return obj.isoformat()
+    elif isinstance(obj, dict):
+        return {k: to_native(v) for k, v in obj.items()}
+    elif isinstance(obj, (list, tuple)):
+        return [to_native(v) for v in obj]
+    else:
+        return obj
+
 
 # Configure logging
 logging.basicConfig(
@@ -98,6 +117,8 @@ class APIResponse(BaseModel):
     message: str
     data: Any
 
+
+
 # Root endpoint
 @app.get("/", response_model=Dict[str, str])
 async def root():
@@ -139,21 +160,25 @@ async def log_float_click(platform_number: int, request: Request):
             logger.warning(f"⚠️ Float {platform_number} not found")
             raise HTTPException(status_code=404, detail=f"Float {platform_number} not found")
         
-        float_record = float_data.iloc[0].to_dict()
-        if 'LAST_DATE' in float_record:
-            float_record['LAST_DATE'] = float_record['LAST_DATE'].isoformat()
+        # Convert float record to native types
+        float_record = to_native(float_data.iloc[0].to_dict())
         
         logger.info(f"✅ Float {platform_number} click processed successfully")
+        
+        # Ensure platform_number is a native type
+        platform_number = int(platform_number)
+        
+        response_data = {
+            "platform_number": platform_number,
+            "float_info": float_record,
+            "click_timestamp": datetime.now().isoformat(),
+            "client_ip": client_ip
+        }
         
         return APIResponse(
             success=True,
             message=f"Float {platform_number} click logged successfully",
-            data={
-                "platform_number": platform_number,
-                "float_info": float_record,
-                "click_timestamp": datetime.now().isoformat(),
-                "client_ip": client_ip
-            }
+            data=response_data
         )
         
     except HTTPException:
@@ -229,12 +254,12 @@ async def get_all_floats(
         if max_temp is not None:
             float_info = float_info[float_info['AVG_TEMP'] <= max_temp]
         
-        # Convert to dict and handle datetime serialization
+        # Convert to dict
         float_data = float_info.to_dict('records')
-        for record in float_data:
-            if 'LAST_DATE' in record:
-                record['LAST_DATE'] = record['LAST_DATE'].isoformat()
-        
+
+        # ✅ Clean numpy/pandas types before returning
+        float_data = to_native(float_data)
+
         return APIResponse(
             success=True,
             message=f"Retrieved {len(float_data)} floats",
@@ -254,10 +279,8 @@ async def get_float(platform_number: int):
         if float_data.empty:
             raise HTTPException(status_code=404, detail="Float not found")
         
-        # Convert to dict
-        result = float_data.iloc[0].to_dict()
-        if 'LAST_DATE' in result:
-            result['LAST_DATE'] = result['LAST_DATE'].isoformat()
+        # Convert to dict and clean numpy types
+        result = to_native(float_data.iloc[0].to_dict())
         
         return APIResponse(
             success=True,
@@ -290,11 +313,13 @@ async def get_float_profiles(
             latest_cycle = profile_data['CYCLE_NUMBER'].max()
             profile_data = profile_data[profile_data['CYCLE_NUMBER'] == latest_cycle]
         
-        # Convert to dict
-        profiles = profile_data.to_dict('records')
+        # Convert to dict and clean numpy types
+        profiles = to_native(profile_data.to_dict('records'))
+        
+        # Format dates
         for record in profiles:
             if 'JULD' in record:
-                record['JULD'] = record['JULD'].isoformat()
+                record['JULD'] = record['JULD'].isoformat() if isinstance(record['JULD'], (datetime, pd.Timestamp)) else record['JULD']
         
         return APIResponse(
             success=True,
@@ -311,11 +336,14 @@ async def get_float_profiles(
 async def get_summary_stats():
     """Get summary statistics for all floats"""
     try:
-        stats = dashboard.get_summary_stats()
+        # Get stats and convert to native types
+        stats = to_native(dashboard.get_summary_stats())
         
-        # Convert datetime objects to ISO format
-        stats['date_range']['start'] = stats['date_range']['start'].isoformat()
-        stats['date_range']['end'] = stats['date_range']['end'].isoformat()
+        # Convert datetime objects to ISO format if they haven't been converted yet
+        if isinstance(stats.get('date_range', {}).get('start'), (datetime, pd.Timestamp)):
+            stats['date_range']['start'] = stats['date_range']['start'].isoformat()
+        if isinstance(stats.get('date_range', {}).get('end'), (datetime, pd.Timestamp)):
+            stats['date_range']['end'] = stats['date_range']['end'].isoformat()
         
         return APIResponse(
             success=True,
@@ -346,15 +374,17 @@ async def get_temperature_series(platform_number: int):
         
         time_series = time_series.sort_values('JULD')
         
-        # Convert to dict
-        series_data = []
-        for _, row in time_series.iterrows():
-            series_data.append({
-                'date': row['JULD'].isoformat(),
-                'cycle': int(row['CYCLE_NUMBER']),
-                'temperature': round(row['TEMP'], 2),
-                'depth': round(row['PRES'], 1)
-            })
+        # Convert to dict and clean numpy types
+        series_data = to_native(time_series.to_dict('records'))
+        
+        # Format dates and round numbers
+        for record in series_data:
+            record['date'] = record['JULD'].isoformat()
+            record['cycle'] = int(record['CYCLE_NUMBER'])
+            record['temperature'] = round(float(record['TEMP']), 2)
+            record['depth'] = round(float(record['PRES']), 1)
+            # Remove original columns
+            del record['JULD'], record['CYCLE_NUMBER'], record['TEMP'], record['PRES']
         
         return APIResponse(
             success=True,
@@ -430,12 +460,8 @@ async def export_data(
             raise HTTPException(status_code=400, detail="Supported data_type: float_info, profiles")
         
         if format == 'json':
-            # Convert datetime to string for JSON serialization
-            data_dict = data.to_dict('records')
-            for record in data_dict:
-                for key, value in record.items():
-                    if isinstance(value, pd.Timestamp):
-                        record[key] = value.isoformat()
+            # Convert to dict and clean numpy/pandas types
+            data_dict = to_native(data.to_dict('records'))
             
             return JSONResponse(content={
                 "success": True,
