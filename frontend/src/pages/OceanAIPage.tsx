@@ -4,7 +4,7 @@ import { Bot, MessageCircle, Send, Lightbulb, TrendingUp, AlertTriangle, Waves, 
 import LoadingSpinner from '../components/LoadingSpinner';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
-import { GoogleGenAI } from "@google/genai";
+// ❌ removed GoogleGenAI import
 
 interface ChatMessage {
   id: string;
@@ -98,13 +98,11 @@ const OceanAIPage: React.FC = () => {
     setIsLoading(true);
 
     try {
-      // Check if it's an exact match with predefined questions (use mock response)
       const exactMatch = predefinedQuestions.find(q => 
         q.question.toLowerCase() === currentInput.toLowerCase()
       );
 
       if (exactMatch) {
-        // Use mock response only for exact matches
         const matchedResponse = mockAIResponses.find(response => 
           response.keywords.some(keyword => currentInput.toLowerCase().includes(keyword))
         );
@@ -122,19 +120,13 @@ const OceanAIPage: React.FC = () => {
             setIsLoading(false);
           }, 2000);
         } else {
-          // Fallback to Gemini if no mock response found even for exact match
           throw new Error('No mock response found, using Gemini');
         }
       } else {
-        // Use Gemini API for other questions
         const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
         if (!apiKey || apiKey === 'your-gemini-api-key-here') {
           throw new Error('Gemini API key not configured');
         }
-
-        const ai = new GoogleGenAI({
-          apiKey: apiKey
-        });
 
         const prompt = `You are an Ocean AI assistant specializing in oceanographic data analysis, Argo floats, and marine science.  
 
@@ -147,12 +139,22 @@ const OceanAIPage: React.FC = () => {
 
         User Question: ${currentInput}`;
 
+        // ✅ direct fetch instead of SDK
+        const response = await fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: prompt }] }]
+            }),
+          }
+        );
 
-        const response = await ai.models.generateContent({
-          model: "gemini-2.5-flash",
-          contents: prompt,
-        });
-        const text = response.text || "I'm sorry, I couldn't generate a response. Please try again.";
+        const data = await response.json();
+        const text =
+          data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+          "I'm sorry, I couldn't generate a response. Please try again.";
 
         const aiResponse: ChatMessage = {
           id: (Date.now() + 1).toString(),
@@ -173,7 +175,7 @@ const OceanAIPage: React.FC = () => {
       const errorResponse: ChatMessage = {
         id: (Date.now() + 1).toString(),
         type: 'ai',
-        content: `I apologize, but I encountered an error while processing your request.\n\n**Error Details:**\n${errorMessage}\n\nPlease try asking about specific oceanographic topics like temperature trends, salinity patterns, or Argo float data.`,
+        content: `I apologize, but I encountered an error while processing your request.\n\nError Details:\n${errorMessage}\n\nPlease try asking about specific oceanographic topics like temperature trends, salinity patterns, or Argo float data.`,
         timestamp: new Date(),
         insights: ["Check if Gemini API key is configured correctly", "Try asking about ocean temperature or salinity", "Check your internet connection"]
       };
@@ -276,18 +278,6 @@ const OceanAIPage: React.FC = () => {
                   );
                 })}
               </div>
-
-              {/* AI Capabilities
-              <div className="mt-6 p-4 bg-gradient-to-br from-purple-900/20 to-blue-900/20 rounded-lg border border-purple-500/20">
-                <h4 className="text-sm font-semibold text-purple-400 mb-2">AI Capabilities</h4>
-                <ul className="text-xs text-gray-400 space-y-1">
-                  <li>• Data pattern recognition</li>
-                  <li>• Anomaly detection</li>
-                  <li>• Trend analysis</li>
-                  <li>• Predictive insights</li>
-                  <li>• Multi-parameter correlation</li>
-                </ul>
-              </div> */}
             </div>
           </div>
 
