@@ -155,3 +155,5 @@
 2025-09-28 17:11:18,666 - api_server - INFO - ⚡ Response: 200 | Time: 0.009s | Path: /floats/1234567/temperature-series
 2025-09-28 17:13:51,507 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/floats?region=
 2025-09-28 17:13:51,510 - api_server - INFO - ⚡ Response: 200 | Time: 0.003s | Path: /floats
+2025-09-28 18:53:33,165 - api_server - INFO - 🌊 Incoming request: GET http://127.0.0.1:8061/floats
+2025-09-28 18:53:33,168 - api_server - INFO - ⚡ Response: 200 | Time: 0.003s | Path: /floats

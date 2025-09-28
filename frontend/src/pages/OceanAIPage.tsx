@@ -4,10 +4,7 @@ import { Bot, MessageCircle, Send, Lightbulb, TrendingUp, AlertTriangle, Waves, 
 import LoadingSpinner from '../components/LoadingSpinner';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
-<<<<<<< HEAD
 // ❌ removed GoogleGenAI import
-=======
->>>>>>> parent of 5480e6f (WE'RE DONE)
 
 interface ChatMessage {
   id: string;
@@ -96,10 +93,10 @@ const OceanAIPage: React.FC = () => {
     };
 
     setMessages(prev => [...prev, userMessage]);
+    const currentInput = inputMessage;
     setInputMessage('');
     setIsLoading(true);
 
-<<<<<<< HEAD
     try {
       const exactMatch = predefinedQuestions.find(q => 
         q.question.toLowerCase() === currentInput.toLowerCase()
@@ -179,27 +176,13 @@ const OceanAIPage: React.FC = () => {
         id: (Date.now() + 1).toString(),
         type: 'ai',
         content: `I apologize, but I encountered an error while processing your request.\n\nError Details:\n${errorMessage}\n\nPlease try asking about specific oceanographic topics like temperature trends, salinity patterns, or Argo float data.`,
-=======
-    // Simulate AI processing
-    setTimeout(() => {
-      const keywords = inputMessage.toLowerCase();
-      const matchedResponse = mockAIResponses.find(response => 
-        response.keywords.some(keyword => keywords.includes(keyword))
-      );
-
-      const aiResponse: ChatMessage = {
-        id: (Date.now() + 1).toString(),
-        type: 'ai',
-        content: matchedResponse?.response || 
-          "That's an interesting question! While I'm currently in demonstration mode, I can help you understand oceanographic patterns, analyze float data, and provide insights about marine conditions. Try asking about temperature trends, salinity patterns, or data anomalies for more detailed responses.",
->>>>>>> parent of 5480e6f (WE'RE DONE)
         timestamp: new Date(),
-        insights: matchedResponse?.insights || ["Ask about specific oceanographic parameters", "Try questions about data trends or anomalies", "I can help interpret scientific measurements"]
+        insights: ["Check if Gemini API key is configured correctly", "Try asking about ocean temperature or salinity", "Check your internet connection"]
       };
 
-      setMessages(prev => [...prev, aiResponse]);
+      setMessages(prev => [...prev, errorResponse]);
       setIsLoading(false);
-    }, 2000);
+    }
   };
 
   const handlePredefinedQuestion = (question: string) => {
@@ -295,21 +278,6 @@ const OceanAIPage: React.FC = () => {
                   );
                 })}
               </div>
-<<<<<<< HEAD
-=======
-
-              {/* AI Capabilities */}
-              <div className="mt-6 p-4 bg-gradient-to-br from-purple-900/20 to-blue-900/20 rounded-lg border border-purple-500/20">
-                <h4 className="text-sm font-semibold text-purple-400 mb-2">AI Capabilities</h4>
-                <ul className="text-xs text-gray-400 space-y-1">
-                  <li>• Data pattern recognition</li>
-                  <li>• Anomaly detection</li>
-                  <li>• Trend analysis</li>
-                  <li>• Predictive insights</li>
-                  <li>• Multi-parameter correlation</li>
-                </ul>
-              </div>
->>>>>>> parent of 5480e6f (WE'RE DONE)
             </div>
           </div>
 
