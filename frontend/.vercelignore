@@ -1,0 +1,55 @@
+# Dependencies
+node_modules/
+
+# Development files
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Testing
+test-results/
+playwright-report/
+e2e/
+coverage/
+*.spec.ts
+*.test.ts
+*.test.tsx
+
+# Development artifacts
+.vscode/
+.idea/
+*.log
+*.tgz
+.eslintrc.*
+.eslintignore
+.prettierrc
+.prettierignore
+
+# Development configs
+playwright.config.ts
+vitest.config.ts
+tailwind.config.js
+postcss.config.*
+tsconfig.node.json
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Build artifacts that aren't needed
+dist/
+build/
+
+# Documentation
+README.md
+IMPLEMENTATION.md
+
+# Git
+.git/
+.gitignore
